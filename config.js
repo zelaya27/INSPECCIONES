@@ -1,5 +1,21 @@
 const CONFIG = {
-  URL_APPS_SCRIPT: "https://script.google.com/macros/s/AKfycbxnzyCj2x_KWQvmcIgikrV_eZdB61NnYStRS512WDdO56uHMROjd7nWcYJdueG5j5WHKQ/exec",
+  URL_APPS_SCRIPT: "PEGAR_URL_WEBAPP_APPS_SCRIPT",
+  APP_NAME: "INSPECCIONES",
   APPSHEET_APP_NAME: "APP_INSPECCIONES-236810661",
-  MY_MAPS_ID: "1hB4wpv-8KyoVvQjr565u_IJPO9tZ5ZM"
+  MAPAS_SECTOR: {
+    "EL PROGRESO": {
+      nombre: "Mapa base El Progreso",
+      mid: "1AD2wEag68h4hiBy5R7fbW9Ir-6BmsCs",
+      lat: 15.069569258342678,
+      lng: -86.7047245,
+      zoom: 9
+    },
+    "JUTICALPA": {
+      nombre: "Mapa base Juticalpa",
+      mid: "1AD2wEag68h4hiBy5R7fbW9Ir-6BmsCs",
+      lat: 15.069569258342678,
+      lng: -86.7047245,
+      zoom: 9
+    }
+  }
 };
