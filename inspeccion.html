@@ -26,7 +26,36 @@ const NOMBRE_ACT={"1":"CONTROL DE VEGETACIÓN","2":"POSTES","3":"CONDUCTORES","4
 document.addEventListener("DOMContentLoaded",init);
 function init(){if(!sessionStorage.getItem("usuario")){window.location.href="index.html";return}const id=sessionStorage.getItem("id_inspeccion_actual");if(!id){window.location.href="panel.html";return}iniciarMapa();cargarDatos(id)}
 function apiJSONP(params){return new Promise((resolve,reject)=>{const cb="jsonp_"+Date.now()+"_"+Math.floor(Math.random()*10000);params.callback=cb;const q=new URLSearchParams(params).toString();const s=document.createElement("script");window[cb]=d=>{resolve(d);s.remove();delete window[cb]};s.onerror=()=>{reject(new Error("Error conectando"));s.remove();delete window[cb]};s.src=CONFIG.URL_APPS_SCRIPT+"?"+q;document.body.appendChild(s)})}
-function iniciarMapa(){const sector=String(sessionStorage.getItem("sector")||"").toUpperCase();const cfg=(CONFIG.MAPAS_SECTOR&&CONFIG.MAPAS_SECTOR[sector])||{lat:14.8,lng:-86.5,zoom:8};map=L.map('map').setView([cfg.lat,cfg.lng],cfg.zoom);L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Tiles © Esri'}).addTo(map)}
+
+function iniciarMapa(){
+  const sector = String(sessionStorage.getItem("sector") || "").trim().toUpperCase();
+
+  const mapasSector = window.MAPAS_SECTOR || {};
+
+  const cfg =
+    mapasSector[sector] ||
+    {
+      nombre: "Mapa base",
+      mid: "",
+      lat: 14.8,
+      lng: -86.5,
+      zoom: 8
+    };
+
+  map = L.map("map").setView([cfg.lat, cfg.lng], cfg.zoom);
+
+  L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    {
+      maxZoom: 19,
+      attribution: "Tiles © Esri"
+    }
+  ).addTo(map);
+
+  console.log("Sector:", sector);
+  console.log("Mapa sector:", cfg);
+}
+  
 async function cargarDatos(id){const inspecciones=await apiJSONP({action:"obtenerInspecciones"});if(inspecciones.ok){inspeccion=(inspecciones.registros||[]).find(r=>obtenerValor(r,"ID_INSPECCIONES")===id);pintarTitulo()}const acts=await apiJSONP({action:"obtenerActividades",idInspeccion:id});if(!acts.ok){alert(acts.error||"No se pudieron cargar actividades.");return}actividades=acts.registros||[];pintarMarcadores();pintarLeyendaTop();pintarResumen();pintarListaItems()}
 function pintarTitulo(){if(!inspeccion)return;const id=obtenerValor(inspeccion,"ID_INSPECCIONES"),circ=obtenerValor(inspeccion,"CIRCUITO_NOMBRE")||obtenerValor(inspeccion,"CIRCUITO"),nom=obtenerValor(inspeccion,"NOMBRE_INSPECCION");document.getElementById("tituloInspeccion").textContent=`INSPECCIÓN #${id} | ${circ} | ${nom}`}
 function pintarMarcadores(){markers.forEach(m=>map.removeLayer(m));markers=[];const bounds=[];actividades.forEach((r,idx)=>{const lat=Number(obtenerValor(r,"LATITUDE")),lng=Number(obtenerValor(r,"LONGITUDE"));if(!lat||!lng)return;const idAct=obtenerValor(r,"ID_ACTIVIDAD"),color=COLOR_ACT[idAct]||"#fbc02d";const icon=L.divIcon({className:'',html:`<div class="marker-dot" style="background:${color}"></div>`,iconSize:[18,18],iconAnchor:[9,9]});const marker=L.marker([lat,lng],{icon}).addTo(map);marker.bindPopup(popupHtml(r));marker.on('click',()=>{});markers.push({marker,reg:r});bounds.push([lat,lng])});if(bounds.length)map.fitBounds(bounds,{padding:[35,35]})}
