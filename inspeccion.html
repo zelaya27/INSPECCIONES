@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-omnivore@0.3.4/leaflet-omnivore.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="config.js"></script>
   <style>
@@ -26,9 +27,10 @@ const NOMBRE_ACT={"1":"CONTROL DE VEGETACIÓN","2":"POSTES","3":"CONDUCTORES","4
 document.addEventListener("DOMContentLoaded",init);
 function init(){if(!sessionStorage.getItem("usuario")){window.location.href="index.html";return}const id=sessionStorage.getItem("id_inspeccion_actual");if(!id){window.location.href="panel.html";return}iniciarMapa();cargarDatos(id)}
 function apiJSONP(params){return new Promise((resolve,reject)=>{const cb="jsonp_"+Date.now()+"_"+Math.floor(Math.random()*10000);params.callback=cb;const q=new URLSearchParams(params).toString();const s=document.createElement("script");window[cb]=d=>{resolve(d);s.remove();delete window[cb]};s.onerror=()=>{reject(new Error("Error conectando"));s.remove();delete window[cb]};s.src=CONFIG.URL_APPS_SCRIPT+"?"+q;document.body.appendChild(s)})}
-
-function iniciarMapa(){
-  const sector = String(sessionStorage.getItem("sector") || "").trim().toUpperCase();
+function iniciarMapa() {
+  const sector = String(sessionStorage.getItem("sector") || "")
+    .trim()
+    .toUpperCase();
 
   const mapasSector = window.MAPAS_SECTOR || {};
 
@@ -42,8 +44,11 @@ function iniciarMapa(){
       zoom: 8
     };
 
-  map = L.map("map").setView([cfg.lat, cfg.lng], cfg.zoom);
+  map = L.map("map", {
+    zoomControl: true
+  }).setView([cfg.lat, cfg.lng], cfg.zoom);
 
+  // Mapa satelital
   L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     {
@@ -52,10 +57,42 @@ function iniciarMapa(){
     }
   ).addTo(map);
 
+  // Capa de circuitos desde Google My Maps, exportada como KML público
+  if (cfg.mid && typeof omnivore !== "undefined") {
+    const urlKml =
+      "https://www.google.com/maps/d/kml?mid=" +
+      encodeURIComponent(cfg.mid) +
+      "&forcekml=1";
+
+    const capaCircuitos = omnivore.kml(urlKml)
+      .on("ready", function () {
+        try {
+          this.setStyle({
+            color: "#00FFFF",
+            weight: 3,
+            opacity: 0.95,
+            fillOpacity: 0.12
+          });
+
+          console.log("Mapa base cargado:", cfg.nombre);
+        } catch (error) {
+          console.warn("El KML cargó, pero no se pudo aplicar estilo a alguna capa:", error);
+        }
+      })
+      .on("error", function (error) {
+        console.error("Error cargando mapa base KML:", error);
+        alert("No se pudo cargar el mapa base del sector. Revisa que el My Maps esté público.");
+      })
+      .addTo(map);
+  } else if (cfg.mid && typeof omnivore === "undefined") {
+    console.error("leaflet-omnivore no está cargado. No se puede cargar el KML del mapa base.");
+    alert("No se cargó la librería para leer KML. Revisa la conexión o el CDN leaflet-omnivore.");
+  }
+
   console.log("Sector:", sector);
   console.log("Mapa sector:", cfg);
 }
-  
+
 async function cargarDatos(id){const inspecciones=await apiJSONP({action:"obtenerInspecciones"});if(inspecciones.ok){inspeccion=(inspecciones.registros||[]).find(r=>obtenerValor(r,"ID_INSPECCIONES")===id);pintarTitulo()}const acts=await apiJSONP({action:"obtenerActividades",idInspeccion:id});if(!acts.ok){alert(acts.error||"No se pudieron cargar actividades.");return}actividades=acts.registros||[];pintarMarcadores();pintarLeyendaTop();pintarResumen();pintarListaItems()}
 function pintarTitulo(){if(!inspeccion)return;const id=obtenerValor(inspeccion,"ID_INSPECCIONES"),circ=obtenerValor(inspeccion,"CIRCUITO_NOMBRE")||obtenerValor(inspeccion,"CIRCUITO"),nom=obtenerValor(inspeccion,"NOMBRE_INSPECCION");document.getElementById("tituloInspeccion").textContent=`INSPECCIÓN #${id} | ${circ} | ${nom}`}
 function pintarMarcadores(){markers.forEach(m=>map.removeLayer(m));markers=[];const bounds=[];actividades.forEach((r,idx)=>{const lat=Number(obtenerValor(r,"LATITUDE")),lng=Number(obtenerValor(r,"LONGITUDE"));if(!lat||!lng)return;const idAct=obtenerValor(r,"ID_ACTIVIDAD"),color=COLOR_ACT[idAct]||"#fbc02d";const icon=L.divIcon({className:'',html:`<div class="marker-dot" style="background:${color}"></div>`,iconSize:[18,18],iconAnchor:[9,9]});const marker=L.marker([lat,lng],{icon}).addTo(map);marker.bindPopup(popupHtml(r));marker.on('click',()=>{});markers.push({marker,reg:r});bounds.push([lat,lng])});if(bounds.length)map.fitBounds(bounds,{padding:[35,35]})}
