@@ -1,5 +1,5 @@
 const CONFIG = {
-  URL_APPS_SCRIPT: "https://script.google.com/macros/s/AKfycbx0MuKF4LBNw3BzXh3ufHtB12jWyK-NJIge9KGMNfw_lEwlhFEdxMY6N_9rkknJhN3AFg/exec",
+  URL_APPS_SCRIPT: "https://script.google.com/macros/s/AKfycbxB1m3QP_ViOkdiVrAeEgvjX47cVB3G0V9xroKBRwxSrrC-D0zn5ektiQtiLkkVRec9AQ/exec",
   APP_NAME: "INSPECCIONES",
   APPSHEET_APP_NAME: "APP_INSPECCIONES-236810661"
 };
