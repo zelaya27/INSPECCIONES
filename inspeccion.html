@@ -46,12 +46,131 @@ function pintarResumen(){const mapa={};obtenerActividadesFiltradas().forEach(r=>
 function pintarListaItems(){const q=document.getElementById("buscarItem").value.trim().toUpperCase();const lista=obtenerActividadesFiltradas().filter(r=>!q||obtenerValor(r,"ITEM").toUpperCase().includes(q));document.getElementById("listaItems").innerHTML=lista.map(r=>{const item=obtenerValor(r,"ITEM"),active=item===itemSeleccionado?" active":"";return `<div class="item-row${active}" onclick="centrarItem('${escaparAtributo(item)}')"><div class="item-head"><span>ITEM ${escaparHtml(item)}</span><span>${escaparHtml(obtenerValor(r,"PRIORIDAD"))}</span></div><div class="item-sub">${escaparHtml(obtenerValor(r,"ACTIVIDAD_NOMBRE"))}</div></div>`}).join("")||'<div class="item-sub">Sin resultados.</div>'}
 function centrarItem(item){const m=markers.find(x=>obtenerValor(x.reg,"ITEM")===item);seleccionarItem(item,true);if(m){const ll=m.marker.getLatLng();map.setView(ll,18);abrirPopupMarker(m.marker,m.reg)}}
 async function seleccionarItem(item,desdeMapa){const r=actividades.find(x=>obtenerValor(x,"ITEM")===String(item));if(!r)return;itemSeleccionado=String(item);pintarListaItems();await pintarDetalleDerecho(r)}
-async function pintarDetalleDerecho(r){const cont=document.getElementById("detallePunto");const estado=normalizarEstado(obtenerValor(r,"ESTADO"));const fotos=["FOTO_1","FOTO_2","FOTO_3"].map(f=>obtenerValor(r,f)).filter(Boolean);let urls=[];for(const f of fotos){const data=await resolverFoto(f);if(data&&(data.thumbnail||data.url||data.viewUrl))urls.push(data.thumbnail||data.url||data.viewUrl)}const main=urls[0]||"";const imgMain=main?`<img class="main-photo" src="${escaparAtributo(main)}" onclick="abrirFotoGrande('${escaparAtributo(main)}')">`:`<div class="detail-empty">Sin foto disponible</div>`;const thumbs=urls.length?`<div class="thumb-row">${urls.map(u=>`<img src="${escaparAtributo(u)}" onclick="abrirFotoGrande('${escaparAtributo(u)}')">`).join("")}</div>`:"";cont.className="point-card";cont.innerHTML=`${imgMain}${thumbs}<div class="point-title">ITEM ${escaparHtml(obtenerValor(r,"ITEM"))}</div><span class="state-badge ${estado==="EJECUTADO"?"state-ejecutado":"state-pendiente"}">${estado}</span>${filaDetalle("Actividad",obtenerValor(r,"ACTIVIDAD_NOMBRE"))}${filaDetalle("Prioridad",obtenerValor(r,"PRIORIDAD"))}${filaDetalle("Cantidad",obtenerValor(r,"CANTIDAD"))}${filaDetalle("Cuadrilla",obtenerValor(r,"TIPO_CUADRILLA"))}${filaDetalle("Estructura",obtenerValor(r,"ESTRUCTURA"))}${filaDetalle("Coordenadas",obtenerValor(r,"COORDENADAS"))}${filaDetalle("Observaciones",obtenerValor(r,"OBSERVACIONES"))}<div class="detail-actions"><button class="btn-run" onclick="pasarEjecutadoSeleccionado()"><i class="fas fa-check"></i> PASAR A EJECUTADO</button><button class="btn-trash" title="Eliminar" onclick="eliminarSeleccionado()"><i class="fas fa-trash"></i></button></div>`}
+
+async function pintarDetalleDerecho(r){
+  const cont = document.getElementById("detallePunto");
+  const estado = normalizarEstado(obtenerValor(r,"ESTADO"));
+
+  const fotos = ["FOTO_1","FOTO_2","FOTO_3"]
+    .map(f => obtenerValor(r,f))
+    .filter(Boolean);
+
+  let urls = [];
+
+  for(const f of fotos){
+    const data = await resolverFoto(f);
+
+    if(data){
+      urls.push({
+        thumb: data.thumbnail || data.miniatura || data.url || f,
+        grande: data.grande || data.url || data.thumbnail || data.miniatura || data.viewUrl || f,
+        original: data.viewUrl || data.original || f
+      });
+    }
+  }
+
+  const main = urls[0] || null;
+
+  const imgMain = main
+    ? `<img class="main-photo"
+            src="${escaparAtributo(main.thumb)}"
+            onclick="abrirFotoGrande('${escaparAtributo(main.grande)}')"
+            onerror="this.onerror=null; this.src='${escaparAtributo(main.original)}';">`
+    : `<div class="detail-empty">Sin foto disponible</div>`;
+
+  const thumbs = urls.length
+    ? `<div class="thumb-row">
+        ${urls.map(u => `
+          <img src="${escaparAtributo(u.thumb)}"
+               onclick="abrirFotoGrande('${escaparAtributo(u.grande)}')"
+               onerror="this.onerror=null; this.src='${escaparAtributo(u.original)}';">
+        `).join("")}
+      </div>`
+    : "";
+
+  cont.className = "point-card";
+
+  cont.innerHTML = `
+    ${imgMain}
+    ${thumbs}
+
+    <div class="point-title">
+      ITEM ${escaparHtml(obtenerValor(r,"ITEM"))}
+    </div>
+
+    <span class="state-badge ${estado==="EJECUTADO" ? "state-ejecutado" : "state-pendiente"}">
+      ${estado}
+    </span>
+
+    ${filaDetalle("Actividad", obtenerValor(r,"ACTIVIDAD_NOMBRE"))}
+    ${filaDetalle("Prioridad", obtenerValor(r,"PRIORIDAD"))}
+    ${filaDetalle("Cantidad", obtenerValor(r,"CANTIDAD"))}
+    ${filaDetalle("Cuadrilla", obtenerValor(r,"TIPO_CUADRILLA"))}
+    ${filaDetalle("Estructura", obtenerValor(r,"ESTRUCTURA"))}
+    ${filaDetalle("Coordenadas", obtenerValor(r,"COORDENADAS"))}
+    ${filaDetalle("Observaciones", obtenerValor(r,"OBSERVACIONES"))}
+
+    <div class="detail-actions">
+      <button class="btn-run" onclick="pasarEjecutadoSeleccionado()">
+        <i class="fas fa-check"></i> PASAR A EJECUTADO
+      </button>
+
+      <button class="btn-trash" title="Eliminar" onclick="eliminarSeleccionado()">
+        <i class="fas fa-trash"></i>
+      </button>
+    </div>
+  `;
+}
+  
 function filaDetalle(label,valor){return `<div class="detail-row"><strong>${escaparHtml(label)}</strong><span>${escaparHtml(valor||"-")}</span></div>`}
 async function pasarEjecutadoSeleccionado(){const r=actividades.find(x=>obtenerValor(x,"ITEM")===itemSeleccionado);if(!r)return;const estado=normalizarEstado(obtenerValor(r,"ESTADO"));if(estado==="EJECUTADO"){alert("Este punto ya está ejecutado.");return}if(!confirm("¿Desea pasar este punto a EJECUTADO?"))return;try{const data=await apiJSONP({action:"actualizarEstadoActividad",idActividad:obtenerValor(r,"ID"),idInspeccion:obtenerValor(r,"ID_INSPECCION"),item:obtenerValor(r,"ITEM"),estado:"EJECUTADO",usuario:sessionStorage.getItem("usuario")||"",sector:sessionStorage.getItem("sector")||""});if(!data.ok)throw new Error(data.error||"No se pudo actualizar.");r.obj.ESTADO="EJECUTADO";aplicarFiltrosPuntos(false);await pintarDetalleDerecho(r);alert("Punto actualizado a EJECUTADO.")}catch(e){alert(e.message)}}
 async function eliminarSeleccionado(){const r=actividades.find(x=>obtenerValor(x,"ITEM")===itemSeleccionado);if(!r)return;const txt=prompt("Para eliminar este punto escriba: ELIMINAR");if(txt!=="ELIMINAR"){alert("No se eliminó el punto.");return}try{const data=await apiJSONP({action:"eliminarActividad",idActividad:obtenerValor(r,"ID"),idInspeccion:obtenerValor(r,"ID_INSPECCION"),item:obtenerValor(r,"ITEM"),usuario:sessionStorage.getItem("usuario")||"",sector:sessionStorage.getItem("sector")||""});if(!data.ok)throw new Error(data.error||"No se pudo eliminar.");actividades=actividades.filter(x=>obtenerValor(x,"ITEM")!==itemSeleccionado);itemSeleccionado="";aplicarFiltrosPuntos(false);document.getElementById("detallePunto").className="detail-empty";document.getElementById("detallePunto").textContent="Punto eliminado. Seleccione otro punto.";alert("Punto eliminado correctamente.")}catch(e){alert(e.message)}}
 function obtenerPrimeraFoto(r){return obtenerValor(r,"FOTO_1")||obtenerValor(r,"FOTO_2")||obtenerValor(r,"FOTO_3")}
-async function resolverFoto(ruta){if(!ruta)return null;if(cacheFotos[ruta])return cacheFotos[ruta];if(String(ruta).startsWith("http")){cacheFotos[ruta]={thumbnail:ruta,url:ruta,viewUrl:ruta};return cacheFotos[ruta]}try{const data=await apiJSONP({action:"obtenerUrlImagen",ruta});if(data.ok){cacheFotos[ruta]=data;return data}}catch(e){}return null}
+
+async function resolverFoto(ruta){
+  if(!ruta) return null;
+
+  ruta = String(ruta).trim();
+
+  if(cacheFotos[ruta]) return cacheFotos[ruta];
+
+  try{
+    const data = await apiJSONP({
+      action: "obtenerUrlImagen",
+      ruta: ruta
+    });
+
+    if(data && data.ok){
+      const resultado = {
+        thumbnail: data.thumbnail || data.miniatura || data.url || ruta,
+        miniatura: data.miniatura || data.thumbnail || data.url || ruta,
+        url: data.url || data.grande || data.thumbnail || data.miniatura || ruta,
+        grande: data.grande || data.url || data.thumbnail || data.miniatura || ruta,
+        viewUrl: data.viewUrl || ruta,
+        original: ruta
+      };
+
+      cacheFotos[ruta] = resultado;
+      return resultado;
+    }
+
+  }catch(e){
+    console.warn("No se pudo convertir la foto, usando original:", e);
+  }
+
+  const respaldo = {
+    thumbnail: ruta,
+    miniatura: ruta,
+    url: ruta,
+    grande: ruta,
+    viewUrl: ruta,
+    original: ruta
+  };
+
+  cacheFotos[ruta] = respaldo;
+  return respaldo;
+}
+
 function abrirFotoGrande(url){if(!url)return;document.getElementById("photoModalImg").src=url;document.getElementById("photoModal").classList.add("show")}
 function cerrarFotoGrande(e){if(e&&e.target.id!=="photoModal"&&e.target.className!=="photo-close")return;document.getElementById("photoModal").classList.remove("show");document.getElementById("photoModalImg").src=""}
 function exportarExcel(){if(!inspeccion){alert("No hay inspección cargada.");return}const id=obtenerValor(inspeccion,"ID_INSPECCIONES"),circ=obtenerValor(inspeccion,"CIRCUITO_NOMBRE")||obtenerValor(inspeccion,"CIRCUITO");const columnas=["ITEM","ACTIVIDAD","PRIORIDAD","TIPO_CUADRILLA","CANTIDAD","LATITUDE","LONGITUDE","CUADRILLA","ESTADO","OBSERVACIONES","ID_INSPECCION","FOTO_1","FECHA_HORA_REGISTRO"];const filas=actividades.map(r=>({ITEM:obtenerValor(r,"ITEM"),ACTIVIDAD:obtenerValor(r,"ACTIVIDAD_NOMBRE"),PRIORIDAD:obtenerValor(r,"PRIORIDAD"),TIPO_CUADRILLA:obtenerValor(r,"TIPO_CUADRILLA"),CANTIDAD:obtenerValor(r,"CANTIDAD"),LATITUDE:obtenerValor(r,"LATITUDE"),LONGITUDE:obtenerValor(r,"LONGITUDE"),CUADRILLA:obtenerValor(r,"CUADRILLA"),ESTADO:obtenerValor(r,"ESTADO"),OBSERVACIONES:obtenerValor(r,"OBSERVACIONES"),ID_INSPECCION:obtenerValor(r,"ID_INSPECCION"),FOTO_1:obtenerValor(r,"FOTO_1"),FECHA_HORA_REGISTRO:obtenerValor(r,"FECHA_HORA_REGISTRO")}));const ws=XLSX.utils.json_to_sheet(filas,{header:columnas});filas.forEach((f,i)=>{const cell="L"+(i+2);if(f.FOTO_1)ws[cell].l={Target:f.FOTO_1,Tooltip:"Ver foto"}});ws["!cols"]=columnas.map(h=>({wch:Math.min(Math.max(h.length+6,14),45)}));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"ACTIVIDADES");XLSX.writeFile(wb,`INSPECCION_${id}_${circ}.xlsx`)}
