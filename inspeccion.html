@@ -47,18 +47,25 @@ function pintarMarcadores(ajustarMapa=true){markers.forEach(m=>map.removeLayer(m
   let img = "";
 
   if(foto){
-    const data = await resolverFoto(foto);
+    try{
+      const data = await apiJSONP({
+        action: "obtenerUrlImagen",
+        ruta: foto
+      });
 
-    if(data){
-      const thumb = data.thumb || data.thumbnail || data.miniatura || data.url || foto;
-      const grande = data.grande || data.url || data.thumb || thumb;
+      if(data && data.ok && (data.miniatura || data.thumbnail || data.url)){
+        const miniatura = data.miniatura || data.thumbnail || data.grande || data.url;
+        const grande = data.grande || data.url || data.miniatura || data.thumbnail;
 
-      img = `
-        <img class="popup-thumb"
-             src="${escaparAtributo(thumb)}"
-             onclick="abrirFotoGrande('${escaparAtributo(grande)}')"
-             onerror="this.onerror=null; this.src='${escaparAtributo(data.original || foto)}';">
-      `;
+        img = `
+          <img class="popup-thumb"
+               src="${escaparAtributo(miniatura)}"
+               onclick="abrirFotoGrande('${escaparAtributo(grande)}')"
+               onerror="this.style.display='none';">
+        `;
+      }
+    }catch(e){
+      console.warn("No se pudo cargar foto popup:", e);
     }
   }
 
@@ -89,38 +96,47 @@ async function pintarDetalleDerecho(r){
   const estado = normalizarEstado(obtenerValor(r,"ESTADO"));
 
   const fotos = ["FOTO_1","FOTO_2","FOTO_3"]
-    .map(f => obtenerValor(r,f))
-    .filter(Boolean);
+    .map(f => ({ campo:f, ruta:obtenerValor(r,f) }))
+    .filter(f => f.ruta);
 
-  let urls = [];
+  let fotosResueltas = [];
 
-  for(const f of fotos){
-    const data = await resolverFoto(f);
-
-    if(data){
-      urls.push({
-        thumb: data.thumb || data.thumbnail || data.miniatura || data.url || f,
-        grande: data.grande || data.url || data.thumb || data.thumbnail || data.miniatura || f,
-        original: data.original || data.viewUrl || f
+  for(const foto of fotos){
+    try{
+      const data = await apiJSONP({
+        action: "obtenerUrlImagen",
+        ruta: foto.ruta
       });
+
+      if(data && data.ok && (data.miniatura || data.thumbnail || data.url)){
+        fotosResueltas.push({
+          titulo: foto.campo,
+          miniatura: data.miniatura || data.thumbnail || data.grande || data.url,
+          grande: data.grande || data.url || data.miniatura || data.thumbnail,
+          viewUrl: data.viewUrl || foto.ruta
+        });
+      }
+    }catch(e){
+      console.warn("No se pudo cargar foto:", foto.ruta, e);
     }
   }
 
-  const main = urls[0] || null;
+  const main = fotosResueltas[0] || null;
 
   const imgMain = main
     ? `<img class="main-photo"
-            src="${escaparAtributo(main.thumb)}"
+            src="${escaparAtributo(main.miniatura)}"
             onclick="abrirFotoGrande('${escaparAtributo(main.grande)}')"
-            onerror="this.onerror=null; this.src='${escaparAtributo(main.original)}';">`
+            onerror="this.style.display='none'; this.insertAdjacentHTML('afterend','<div class=&quot;detail-empty&quot;>No se pudo cargar miniatura</div>');">`
     : `<div class="detail-empty">Sin foto disponible</div>`;
 
-  const thumbs = urls.length
+  const thumbs = fotosResueltas.length
     ? `<div class="thumb-row">
-        ${urls.map(u => `
-          <img src="${escaparAtributo(u.thumb)}"
-               onclick="abrirFotoGrande('${escaparAtributo(u.grande)}')"
-               onerror="this.onerror=null; this.src='${escaparAtributo(u.original)}';">
+        ${fotosResueltas.map(f => `
+          <img src="${escaparAtributo(f.miniatura)}"
+               title="${escaparAtributo(f.titulo)}"
+               onclick="abrirFotoGrande('${escaparAtributo(f.grande)}')"
+               onerror="this.style.display='none';">
         `).join("")}
       </div>`
     : "";
@@ -167,54 +183,19 @@ function obtenerPrimeraFoto(r){return obtenerValor(r,"FOTO_1")||obtenerValor(r,"
 async function resolverFoto(ruta){
   if(!ruta) return null;
 
-  ruta = String(ruta).trim();
-
-  if(cacheFotos[ruta]) return cacheFotos[ruta];
-
   try{
     const data = await apiJSONP({
       action: "obtenerUrlImagen",
-      ruta: ruta
+      ruta: String(ruta).trim()
     });
-
-    if(data && data.ok){
-      const resultado = {
-        thumb: data.thumb || data.thumbnail || data.miniatura || data.url || ruta,
-        grande: data.grande || data.url || data.thumb || data.thumbnail || data.miniatura || ruta,
-        original: data.original || data.viewUrl || ruta
-      };
-
-      cacheFotos[ruta] = resultado;
-      return resultado;
-    }
-
+    return data && data.ok ? data : null;
   }catch(e){
-    console.warn("No se pudo resolver la foto:", e);
+    console.warn("Error resolviendo foto:", e);
+    return null;
   }
-
-  const respaldo = {
-    thumb: ruta,
-    grande: ruta,
-    original: ruta
-  };
-
-  cacheFotos[ruta] = respaldo;
-  return respaldo;
 }
 
-function abrirFotoGrande(url){
-  if(!url) return;
-
-  const img = document.getElementById("photoModalImg");
-  const modal = document.getElementById("photoModal");
-
-  img.onerror = function(){
-    window.open(url, "_blank");
-  };
-
-  img.src = url;
-  modal.classList.add("show");
-}
+function abrirFotoGrande(url){if(!url)return;document.getElementById("photoModalImg").src=url;document.getElementById("photoModal").classList.add("show")}
 function cerrarFotoGrande(e){if(e&&e.target.id!=="photoModal"&&e.target.className!=="photo-close")return;document.getElementById("photoModal").classList.remove("show");document.getElementById("photoModalImg").src=""}
 function exportarExcel(){if(!inspeccion){alert("No hay inspección cargada.");return}const id=obtenerValor(inspeccion,"ID_INSPECCIONES"),circ=obtenerValor(inspeccion,"CIRCUITO_NOMBRE")||obtenerValor(inspeccion,"CIRCUITO");const columnas=["ITEM","ACTIVIDAD","PRIORIDAD","TIPO_CUADRILLA","CANTIDAD","LATITUDE","LONGITUDE","CUADRILLA","ESTADO","OBSERVACIONES","ID_INSPECCION","FOTO_1","FECHA_HORA_REGISTRO"];const filas=actividades.map(r=>({ITEM:obtenerValor(r,"ITEM"),ACTIVIDAD:obtenerValor(r,"ACTIVIDAD_NOMBRE"),PRIORIDAD:obtenerValor(r,"PRIORIDAD"),TIPO_CUADRILLA:obtenerValor(r,"TIPO_CUADRILLA"),CANTIDAD:obtenerValor(r,"CANTIDAD"),LATITUDE:obtenerValor(r,"LATITUDE"),LONGITUDE:obtenerValor(r,"LONGITUDE"),CUADRILLA:obtenerValor(r,"CUADRILLA"),ESTADO:obtenerValor(r,"ESTADO"),OBSERVACIONES:obtenerValor(r,"OBSERVACIONES"),ID_INSPECCION:obtenerValor(r,"ID_INSPECCION"),FOTO_1:obtenerValor(r,"FOTO_1"),FECHA_HORA_REGISTRO:obtenerValor(r,"FECHA_HORA_REGISTRO")}));const ws=XLSX.utils.json_to_sheet(filas,{header:columnas});filas.forEach((f,i)=>{const cell="L"+(i+2);if(f.FOTO_1)ws[cell].l={Target:f.FOTO_1,Tooltip:"Ver foto"}});ws["!cols"]=columnas.map(h=>({wch:Math.min(Math.max(h.length+6,14),45)}));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"ACTIVIDADES");XLSX.writeFile(wb,`INSPECCION_${id}_${circ}.xlsx`)}
 function exportarKML(){if(!inspeccion)return;const id=obtenerValor(inspeccion,"ID_INSPECCIONES"),circ=obtenerValor(inspeccion,"CIRCUITO_NOMBRE")||obtenerValor(inspeccion,"CIRCUITO");let kml=`<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>INSPECCION ${id}</name>`;actividades.forEach(r=>{const lat=obtenerValor(r,"LATITUDE"),lng=obtenerValor(r,"LONGITUDE");if(!lat||!lng)return;kml+=`<Placemark><name>ITEM ${xml(obtenerValor(r,"ITEM"))} - ${xml(obtenerValor(r,"ACTIVIDAD_NOMBRE"))}</name><description><![CDATA[<b>Estado:</b> ${escaparHtml(obtenerValor(r,"ESTADO"))}<br><b>Prioridad:</b> ${escaparHtml(obtenerValor(r,"PRIORIDAD"))}<br><b>Cantidad:</b> ${escaparHtml(obtenerValor(r,"CANTIDAD"))}<br><b>Observaciones:</b> ${escaparHtml(obtenerValor(r,"OBSERVACIONES"))}<br><b>Foto 1:</b> ${escaparHtml(obtenerValor(r,"FOTO_1"))}]]></description><Point><coordinates>${lng},${lat},0</coordinates></Point></Placemark>`});kml+=`</Document></kml>`;const blob=new Blob([kml],{type:"application/vnd.google-earth.kml+xml"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`INSPECCION_${id}_${circ}.kml`;document.body.appendChild(a);a.click();a.remove()}
