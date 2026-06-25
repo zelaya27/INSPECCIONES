@@ -49,11 +49,31 @@
   <div class="topbar">
     <div class="left-actions">
       <button class="btn btn-back" onclick="volver()"><i class="fas fa-arrow-left"></i> Volver</button>
-      <button class="btn btn-excel" onclick="exportarExcel()"><i class="fas fa-file-excel"></i> Exportar Todo</button>
-      <button class="btn btn-kml" onclick="exportarKML()"><i class="fas fa-globe-americas"></i> KML</button>
+      <button
+    id="btnExportarTodo"
+    class="btn btn-excel"
+    onclick="exportarExcel(this)">
+    <i class="fas fa-file-excel"></i>
+    Exportar Todo
+</button>
+      <button
+    id="btnKML"
+    class="btn btn-kml"
+    onclick="exportarKML(this)">
+    <i class="fas fa-map"></i>
+    KML
+</button>
+
+      
       <button class="btn btn-poly" id="btnPoligono" onclick="activarPoligono()"><i class="fas fa-draw-polygon"></i> Polígono</button>
       <button class="btn" onclick="limpiarPoligono()"><i class="fas fa-eraser"></i> Limpiar Polígono</button>
-      <button class="btn btn-excel" onclick="exportarPuntosPoligono()"><i class="fas fa-file-excel"></i> Exportar Polígono</button>
+      <button
+    id="btnExportarPoligono"
+    class="btn btn-excel"
+    onclick="exportarPuntosPoligono(this)">
+    <i class="fas fa-file-excel"></i>
+    Exportar Polígono
+</button>
       <button class="btn btn-activities" onclick="togglePanelIzquierdo()"><i class="fas fa-bars"></i> Actividades</button>
     </div>
     <div class="right-info"><div class="info-title" id="tituloInspeccion">Cargando inspección...</div></div>
@@ -486,7 +506,8 @@ function limpiarPoligono(mostrarMensaje=true){
   if(mostrarMensaje) alert("Polígono limpiado.");
 }
 
-async function exportarPuntosPoligono(){
+async function exportarPuntosPoligono(btn){
+  setEstadoBoton(btn,true);
   if(!puntosDentroPoligono.length){
     alert("No hay puntos seleccionados dentro del polígono.");
     return;
@@ -543,6 +564,8 @@ async function exportarPuntosPoligono(){
   XLSX.utils.book_append_sheet(wb, ws, "PUNTOS_POLIGONO");
 
   XLSX.writeFile(wb, nombreArchivoInspeccion() + ".xlsx");
+
+  setEstadoBoton(btn,false);
 }
 
 function mostrarInfoPoligono(texto){
@@ -660,7 +683,9 @@ function formatearFechaHora(fecha){
 
   return fecha;
 }
-async function exportarExcel(){
+async function exportarExcel(btn){
+
+  setEstadoBoton(btn,true);
   if(!inspeccion){
     alert("No hay inspección cargada.");
     return;
@@ -717,9 +742,36 @@ async function exportarExcel(){
   XLSX.utils.book_append_sheet(wb, ws, "ACTIVIDADES");
 
   XLSX.writeFile(wb, nombreArchivoInspeccion() + ".xlsx");
+  setEstadoBoton(btn,false);
 }
+  
+function setEstadoBoton(btn, cargando, textoOriginal){
 
-function exportarKML(){if(!inspeccion)return;const id=obtenerValor(inspeccion,"ID_INSPECCIONES"),circ=obtenerValor(inspeccion,"CIRCUITO_NOMBRE")||obtenerValor(inspeccion,"CIRCUITO");let kml=`<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>INSPECCION ${id}</name>`;actividades.forEach(r=>{const lat=obtenerValor(r,"LATITUDE"),lng=obtenerValor(r,"LONGITUDE");if(!lat||!lng)return;kml+=`<Placemark><name>ITEM ${xml(obtenerValor(r,"ITEM"))} - ${xml(obtenerValor(r,"ACTIVIDAD_NOMBRE"))}</name><description><![CDATA[<b>Estado:</b> ${escaparHtml(obtenerValor(r,"ESTADO"))}<br><b>Prioridad:</b> ${escaparHtml(obtenerValor(r,"PRIORIDAD"))}<br><b>Cantidad:</b> ${escaparHtml(obtenerValor(r,"CANTIDAD"))}<br><b>Observaciones:</b> ${escaparHtml(obtenerValor(r,"OBSERVACIONES"))}<br><b>Foto 1:</b> ${escaparHtml(obtenerValor(r,"FOTO_1"))}]]></description><Point><coordinates>${lng},${lat},0</coordinates></Point></Placemark>`});kml+=`</Document></kml>`;const blob=new Blob([kml],{type:"application/vnd.google-earth.kml+xml"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`INSPECCION_${id}_${circ}.kml`;document.body.appendChild(a);a.click();a.remove()}
+  if(!btn) return;
+
+  if(cargando){
+
+    btn.disabled = true;
+    btn.dataset.texto = textoOriginal || btn.innerHTML;
+
+    btn.innerHTML = `
+      <i class="fas fa-spinner fa-spin"></i>
+      Cargando...
+    `;
+
+  }else{
+
+    btn.disabled = false;
+
+    if(btn.dataset.texto){
+      btn.innerHTML = btn.dataset.texto;
+    }
+
+  }
+
+}
+function exportarKML(btn){ setEstadoBoton(btn,true); if(!inspeccion)return;const id=obtenerValor(inspeccion,"ID_INSPECCIONES"),circ=obtenerValor(inspeccion,"CIRCUITO_NOMBRE")||obtenerValor(inspeccion,"CIRCUITO");let kml=`<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>INSPECCION ${id}</name>`;actividades.forEach(r=>{const lat=obtenerValor(r,"LATITUDE"),lng=obtenerValor(r,"LONGITUDE");if(!lat||!lng)return;kml+=`<Placemark><name>ITEM ${xml(obtenerValor(r,"ITEM"))} - ${xml(obtenerValor(r,"ACTIVIDAD_NOMBRE"))}</name><description><![CDATA[<b>Estado:</b> ${escaparHtml(obtenerValor(r,"ESTADO"))}<br><b>Prioridad:</b> ${escaparHtml(obtenerValor(r,"PRIORIDAD"))}<br><b>Cantidad:</b> ${escaparHtml(obtenerValor(r,"CANTIDAD"))}<br><b>Observaciones:</b> ${escaparHtml(obtenerValor(r,"OBSERVACIONES"))}<br><b>Foto 1:</b> ${escaparHtml(obtenerValor(r,"FOTO_1"))}]]></description><Point><coordinates>${lng},${lat},0</coordinates></Point></Placemark>`});kml+=`</Document></kml>`;const blob=new Blob([kml],{type:"application/vnd.google-earth.kml+xml"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`INSPECCION_${id}_${circ}.kml`;document.body.appendChild(a);a.click();a.remove() 
+                        setEstadoBoton(btn,false); }
 function togglePanelIzquierdo(){panelIzquierdoAbierto=!panelIzquierdoAbierto;document.getElementById("layout").classList.toggle("left-open",panelIzquierdoAbierto);setTimeout(()=>map.invalidateSize(),240)}
 function volver(){window.location.href="panel.html"}function normalizarTextoSimple(v){return String(v||"").trim().toUpperCase().replace(/\s+/g," ")}function obtenerValor(r,c){return String((r&&r.obj&&r.obj[c])??"").trim()}function normalizarEstado(e){return String(e||"PENDIENTE").trim().toUpperCase()==="EJECUTADO"?"EJECUTADO":"PENDIENTE"}function escaparHtml(t){return String(t??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}function escaparAtributo(t){return String(t??"").replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/"/g,"&quot;").replace(/\n/g," ")}function xml(t){return String(t??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
 </script>
