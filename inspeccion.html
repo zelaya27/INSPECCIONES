@@ -13,25 +13,50 @@
   <style>
     :root{--primary:#556b2f;--primary-dark:#3f4f23;--primary-soft:#edf5e8;--bg:#f5f8f2;--card:#fff;--text:#0f172a;--muted:#64748b;--border:#dbe3d6;--success:#16a34a;--success-soft:#dcfce7;--danger:#dc2626;--danger-soft:#ffe4e6;--orange:#f59e0b;--shadow:0 12px 35px rgba(15,23,42,.08)}
     *{box-sizing:border-box}body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}.topbar{height:54px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 14px;z-index:20}.left-actions,.right-info{display:flex;align-items:center;gap:8px}.btn{height:36px;border:1px solid var(--border);background:#fff;border-radius:9px;padding:0 12px;cursor:pointer;font-weight:900;display:inline-flex;align-items:center;gap:7px}.btn:hover{background:var(--primary-soft)}.btn-back{color:var(--primary)}.btn-excel{color:var(--success)}.btn-kml{color:var(--orange)}.btn-activities{color:#243016}.filter-select{height:36px;border:1px solid var(--border);background:#fff;border-radius:9px;padding:0 10px;font-weight:900;color:#243016;outline:none;max-width:170px}.filter-select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(85,107,47,.10)}.info-title{font-weight:900;color:#243016;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:850px}.legend-top{height:42px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:0 14px 0 52px;font-size:12px;font-weight:800;overflow-x:auto;white-space:nowrap}.legend-dot{width:13px;height:13px;border-radius:50%;display:inline-block;margin-right:5px;border:1px solid rgba(0,0,0,.12)}.layout{height:calc(100vh - 96px);display:grid;grid-template-columns:0 1fr 340px;transition:.2s}.layout.left-open{grid-template-columns:330px 1fr 340px}.map-wrap{position:relative;min-width:0}#map{width:100%;height:100%}.left-side{background:#fff;border-right:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}.left-side-content{padding:12px;overflow:auto}.right-side{background:#fff;border-left:1px solid var(--border);box-shadow:var(--shadow);overflow:auto}.panel-header{height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid var(--border);font-weight:900;color:#243016}.search-item{width:100%;height:38px;border:1px solid var(--border);border-radius:9px;padding:0 10px;margin-bottom:12px;outline:none}.summary-title{font-size:12px;color:var(--muted);font-weight:900;margin:8px 0}.summary-row{display:grid;grid-template-columns:20px 1fr 58px;align-items:center;gap:8px;padding:8px 6px;border-radius:8px;font-size:13px}.summary-row:hover{background:var(--primary-soft)}.summary-count{text-align:right;font-weight:900;color:var(--primary)}.item-row{padding:9px;border:1px solid var(--border);border-radius:9px;margin-bottom:8px;cursor:pointer}.item-row.active,.item-row:hover{background:var(--primary-soft);border-color:var(--primary)}.item-head{display:flex;justify-content:space-between;font-weight:900;font-size:13px}.item-sub{font-size:12px;color:var(--muted);margin-top:4px}.marker-dot{width:18px;height:18px;border-radius:50%;border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,.35)}.popup-title{font-weight:900;margin-bottom:4px}.popup-body{font-size:12px;line-height:1.35}.popup-thumb{width:118px;height:84px;object-fit:cover;border-radius:8px;border:1px solid var(--border);margin-top:7px;cursor:pointer;background:#f1f5f9}.popup-btn{margin-top:8px;border:none;background:var(--primary);color:white;border-radius:7px;height:30px;padding:0 10px;cursor:pointer;font-weight:900}.detail-empty{padding:24px;color:var(--muted);font-weight:800;text-align:center}.point-card{padding:14px}.main-photo{width:100%;height:190px;object-fit:cover;border-radius:14px;border:1px solid var(--border);background:#f1f5f9;cursor:pointer}.thumb-row{display:flex;gap:8px;margin-top:8px;overflow-x:auto}.thumb-row img{width:72px;height:58px;object-fit:cover;border-radius:9px;border:1px solid var(--border);cursor:pointer;background:#f1f5f9}.point-title{font-weight:900;font-size:18px;margin:12px 0 4px;color:#243016}.state-badge{display:inline-flex;padding:7px 10px;border-radius:8px;font-size:12px;font-weight:900;margin-bottom:10px}.state-pendiente{background:var(--danger-soft);color:var(--danger)}.state-ejecutado{background:var(--success-soft);color:var(--success)}.detail-row{display:grid;grid-template-columns:118px 1fr;gap:8px;margin-bottom:9px;font-size:13px}.detail-row strong{color:#243016}.detail-actions{display:grid;grid-template-columns:1fr 46px;gap:8px;margin-top:14px}.btn-run{background:var(--success);color:white;border:none;border-radius:10px;height:42px;font-weight:900;cursor:pointer}.btn-run:hover{filter:brightness(.95)}.btn-trash{background:#fff;border:1px solid var(--danger);color:var(--danger);border-radius:10px;height:42px;font-weight:900;cursor:pointer}.btn-trash:hover{background:var(--danger-soft)}.photo-modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.86);z-index:9999;align-items:center;justify-content:center;padding:20px}.photo-modal.show{display:flex}.photo-modal img{max-width:96vw;max-height:88vh;border-radius:12px;background:#fff}.photo-close{position:fixed;top:14px;right:18px;width:42px;height:42px;border:none;border-radius:50%;background:#fff;color:var(--danger);font-size:24px;font-weight:900;cursor:pointer}.saving{opacity:.55;pointer-events:none}@media(max-width:1100px){.layout,.layout.left-open{grid-template-columns:1fr}.left-side{display:none}.right-side{display:none}.info-title{max-width:420px}.legend-top{padding-left:14px}}
+  
+    .btn-poly{color:#2563eb}
+    .btn-poly-active{background:#dbeafe;color:#1d4ed8;border-color:#93c5fd}
+    .poly-info{
+      position:absolute;
+      top:12px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:900;
+      background:rgba(255,255,255,.96);
+      border:1px solid var(--border);
+      border-radius:12px;
+      box-shadow:var(--shadow);
+      padding:9px 14px;
+      color:#243016;
+      font-size:13px;
+      font-weight:900;
+      display:none;
+      pointer-events:none;
+      max-width:90%;
+      text-align:center;
+    }
+    .poly-info.show{display:block}
+
   </style>
 </head>
 <body>
-  <div class="topbar"><div class="left-actions"><button class="btn btn-back" onclick="volver()"><i class="fas fa-arrow-left"></i> Volver</button><button class="btn btn-excel" onclick="exportarExcel()"><i class="fas fa-file-excel"></i> Excel</button><button class="btn btn-kml" onclick="exportarKML()"><i class="fas fa-globe-americas"></i> KML</button><button class="btn btn-activities" onclick="togglePanelIzquierdo()"><i class="fas fa-bars"></i> Actividades</button><select id="filtroPrioridadPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Prioridad: Todas</option></select><select id="filtroActividadPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Actividad: Todas</option></select><select id="filtroEstadoPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Estado: Todos</option></select><select id="filtroCuadrillaPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Tipo Cuadrilla: Todas</option></select><button class="btn" onclick="limpiarFiltrosPuntos()"><i class="fas fa-sync-alt"></i></button></div><div class="right-info"><div class="info-title" id="tituloInspeccion">Cargando inspección...</div></div></div>
+  <div class="topbar"><div class="left-actions"><button class="btn btn-back" onclick="volver()"><i class="fas fa-arrow-left"></i> Volver</button><button class="btn btn-excel" onclick="exportarExcel()"><i class="fas fa-file-excel"></i> Excel</button><button class="btn btn-kml" onclick="exportarKML()"><i class="fas fa-globe-americas"></i> KML</button><button class="btn btn-poly" id="btnPoligono" onclick="activarPoligono()"><i class="fas fa-draw-polygon"></i> Polígono</button><button class="btn btn-excel" onclick="exportarPuntosPoligono()"><i class="fas fa-file-excel"></i> Exportar Polígono</button><button class="btn" onclick="limpiarPoligono()" title="Limpiar polígono"><i class="fas fa-eraser"></i></button><button class="btn btn-activities" onclick="togglePanelIzquierdo()"><i class="fas fa-bars"></i> Actividades</button><select id="filtroPrioridadPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Prioridad: Todas</option></select><select id="filtroActividadPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Actividad: Todas</option></select><select id="filtroEstadoPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Estado: Todos</option></select><select id="filtroCuadrillaPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Tipo Cuadrilla: Todas</option></select><button class="btn" onclick="limpiarFiltrosPuntos()"><i class="fas fa-sync-alt"></i></button></div><div class="right-info"><div class="info-title" id="tituloInspeccion">Cargando inspección...</div></div></div>
   <div class="legend-top" id="leyendaTop"></div>
   <div class="layout" id="layout">
     <aside class="left-side" id="leftSide"><div class="panel-header"><span><i class="fas fa-list"></i> ACTIVIDADES</span><button class="btn" onclick="togglePanelIzquierdo()"><i class="fas fa-times"></i></button></div><div class="left-side-content"><input id="buscarItem" class="search-item" placeholder="Buscar ITEM..." oninput="pintarListaItems()"><div class="summary-title">Totales por actividad</div><div id="resumenActividades"></div><div class="summary-title">Items</div><div id="listaItems"></div></div></aside>
-    <div class="map-wrap"><div id="map"></div></div>
+    <div class="map-wrap"><div id="polyInfo" class="poly-info"></div><div id="map"></div></div>
     <aside class="right-side"><div class="panel-header"><span><i class="fas fa-location-dot"></i> PUNTO SELECCIONADO</span></div><div id="detallePunto" class="detail-empty">Seleccione un punto del mapa o un item de la lista.</div></aside>
   </div>
   <div class="photo-modal" id="photoModal" onclick="cerrarFotoGrande(event)"><button class="photo-close" onclick="cerrarFotoGrande()">&times;</button><img id="photoModalImg" src="" alt="Foto"></div>
 <script>
 let map,markers=[],actividades=[],inspeccion=null,panelIzquierdoAbierto=false,itemSeleccionado="",cacheFotos={};
+let modoPoligono=false,puntosPoligono=[],capaPoligono=null,marcadoresPoligono=[],puntosDentroPoligono=[];
 const COLOR_ACT={"1":"#2e7d32","2":"#d32f2f","3":"#fbc02d","4":"#1976d2","5":"#795548","6":"#1976d2","7":"#1976d2","8":"#616161","9":"#7b1fa2","10":"#fbc02d"};
 const NOMBRE_ACT={"1":"CONTROL DE VEGETACIÓN","2":"POSTES","3":"CONDUCTORES","4":"TRANSFORMADORES","5":"CRUCETES","6":"AISLAMIENTO","7":"EQUIPOS DE PROTECCIÓN","8":"APOYO A OTRA GERENCIA","9":"MEJORA - MODIFICACIÓN DE LA RED","10":"INFRAESTRUCTURA"};
 document.addEventListener("DOMContentLoaded",init);
 function init(){if(!sessionStorage.getItem("usuario")){window.location.href="index.html";return}const id=sessionStorage.getItem("id_inspeccion_actual");if(!id){window.location.href="panel.html";return}iniciarMapa();cargarDatos(id)}
 function apiJSONP(params){return new Promise((resolve,reject)=>{const cb="jsonp_"+Date.now()+"_"+Math.floor(Math.random()*10000);params.callback=cb;const q=new URLSearchParams(params).toString();const s=document.createElement("script");window[cb]=d=>{resolve(d);s.remove();delete window[cb]};s.onerror=()=>{reject(new Error("Error conectando"));s.remove();delete window[cb]};s.src=CONFIG.URL_APPS_SCRIPT+"?"+q;document.body.appendChild(s)})}
-function iniciarMapa(){const sector=String(sessionStorage.getItem("sector")||"").trim().toUpperCase();const mapasSector=window.MAPAS_SECTOR||{};const cfg=mapasSector[sector]||{nombre:"Mapa base",mid:"",lat:14.8,lng:-86.5,zoom:8};map=L.map("map",{zoomControl:true}).setView([cfg.lat,cfg.lng],cfg.zoom);L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{maxZoom:19,attribution:"Tiles © Esri"}).addTo(map);if(cfg.mid&&typeof omnivore!=="undefined"){const urlKml="https://www.google.com/maps/d/kml?mid="+encodeURIComponent(cfg.mid)+"&forcekml=1";omnivore.kml(urlKml).on("ready",function(){try{this.setStyle({color:"#00FFFF",weight:3,opacity:.95,fillOpacity:.12})}catch(e){console.warn(e)}}).on("error",function(error){console.error("Error KML:",error);alert("No se pudo cargar el mapa base del sector.")}).addTo(map)}}
+function iniciarMapa(){const sector=String(sessionStorage.getItem("sector")||"").trim().toUpperCase();const mapasSector=window.MAPAS_SECTOR||{};const cfg=mapasSector[sector]||{nombre:"Mapa base",mid:"",lat:14.8,lng:-86.5,zoom:8};map=L.map("map",{zoomControl:true}).setView([cfg.lat,cfg.lng],cfg.zoom);map.doubleClickZoom.disable();L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{maxZoom:19,attribution:"Tiles © Esri"}).addTo(map);if(cfg.mid&&typeof omnivore!=="undefined"){const urlKml="https://www.google.com/maps/d/kml?mid="+encodeURIComponent(cfg.mid)+"&forcekml=1";omnivore.kml(urlKml).on("ready",function(){try{this.setStyle({color:"#00FFFF",weight:3,opacity:.95,fillOpacity:.12})}catch(e){console.warn(e)}}).on("error",function(error){console.error("Error KML:",error);alert("No se pudo cargar el mapa base del sector.")}).addTo(map)}}
 async function cargarDatos(id){const inspecciones=await apiJSONP({action:"obtenerInspecciones"});if(inspecciones.ok){inspeccion=(inspecciones.registros||[]).find(r=>obtenerValor(r,"ID_INSPECCIONES")===id);pintarTitulo()}const acts=await apiJSONP({action:"obtenerActividades",idInspeccion:id});if(!acts.ok){alert(acts.error||"No se pudieron cargar actividades.");return}actividades=acts.registros||[];llenarFiltrosPuntos();aplicarFiltrosPuntos(false);const primera=obtenerActividadesFiltradas()[0]||actividades[0];if(primera){seleccionarItem(obtenerValor(primera,"ITEM"),false)}}
 function pintarTitulo(){if(!inspeccion)return;const id=obtenerValor(inspeccion,"ID_INSPECCIONES"),circ=obtenerValor(inspeccion,"CIRCUITO_NOMBRE")||obtenerValor(inspeccion,"CIRCUITO"),nom=obtenerValor(inspeccion,"NOMBRE_INSPECCION");document.getElementById("tituloInspeccion").textContent=`INSPECCIÓN #${id} | ${circ} | ${nom}`}
 function obtenerActividadesFiltradas(){const prioridad=document.getElementById("filtroPrioridadPunto")?.value||"ALL";const actividad=document.getElementById("filtroActividadPunto")?.value||"ALL";const estado=document.getElementById("filtroEstadoPunto")?.value||"ALL";const cuadrilla=document.getElementById("filtroCuadrillaPunto")?.value||"ALL";return actividades.filter(r=>{const p=normalizarTextoSimple(obtenerValor(r,"PRIORIDAD"));const a=String(obtenerValor(r,"ID_ACTIVIDAD")||"").trim();const e=normalizarEstado(obtenerValor(r,"ESTADO"));const c=normalizarTextoSimple(obtenerValor(r,"TIPO_CUADRILLA"));if(prioridad!=="ALL"&&p!==prioridad)return false;if(actividad!=="ALL"&&a!==actividad)return false;if(estado!=="ALL"&&e!==estado)return false;if(cuadrilla!=="ALL"&&c!==cuadrilla)return false;return true})}
@@ -197,6 +222,274 @@ async function resolverFoto(ruta){
 
 function abrirFotoGrande(url){if(!url)return;document.getElementById("photoModalImg").src=url;document.getElementById("photoModal").classList.add("show")}
 function cerrarFotoGrande(e){if(e&&e.target.id!=="photoModal"&&e.target.className!=="photo-close")return;document.getElementById("photoModal").classList.remove("show");document.getElementById("photoModalImg").src=""}
+
+/*************************************************
+ * POLÍGONO: SELECCIONAR Y EXPORTAR PUNTOS
+ *************************************************/
+
+function activarPoligono(){
+  if(!map){
+    alert("El mapa todavía no está listo.");
+    return;
+  }
+
+  limpiarPoligono(false);
+
+  modoPoligono = true;
+  puntosPoligono = [];
+  puntosDentroPoligono = [];
+
+  const btn = document.getElementById("btnPoligono");
+  if(btn) btn.classList.add("btn-poly-active");
+
+  mostrarInfoPoligono("Modo polígono activo: haga clic en el mapa para marcar puntos. Doble clic para cerrar y seleccionar.");
+
+  map.on("click", agregarPuntoPoligono);
+  map.on("dblclick", cerrarPoligono);
+}
+
+function agregarPuntoPoligono(e){
+  if(!modoPoligono) return;
+
+  const lat = e.latlng.lat;
+  const lng = e.latlng.lng;
+
+  puntosPoligono.push([lat,lng]);
+
+  const punto = L.circleMarker([lat,lng],{
+    radius:5,
+    color:"#1d4ed8",
+    weight:2,
+    fillColor:"#60a5fa",
+    fillOpacity:.9
+  }).addTo(map);
+
+  marcadoresPoligono.push(punto);
+
+  redibujarPoligonoTemporal();
+
+  mostrarInfoPoligono(
+    "Puntos del polígono: " + puntosPoligono.length +
+    ". Doble clic para cerrar."
+  );
+}
+
+function redibujarPoligonoTemporal(){
+  if(capaPoligono){
+    map.removeLayer(capaPoligono);
+    capaPoligono = null;
+  }
+
+  if(!puntosPoligono.length) return;
+
+  if(puntosPoligono.length === 1){
+    return;
+  }
+
+  if(puntosPoligono.length === 2){
+    capaPoligono = L.polyline(puntosPoligono,{
+      color:"#2563eb",
+      weight:3,
+      opacity:.95
+    }).addTo(map);
+    return;
+  }
+
+  capaPoligono = L.polygon(puntosPoligono,{
+    color:"#2563eb",
+    weight:3,
+    opacity:.95,
+    fillColor:"#60a5fa",
+    fillOpacity:.22
+  }).addTo(map);
+}
+
+function cerrarPoligono(e){
+  if(!modoPoligono) return;
+
+  if(e && e.originalEvent){
+    L.DomEvent.stop(e);
+  }
+
+  if(puntosPoligono.length < 3){
+    alert("Debe marcar al menos 3 puntos para formar un polígono.");
+    return;
+  }
+
+  modoPoligono = false;
+
+  map.off("click", agregarPuntoPoligono);
+  map.off("dblclick", cerrarPoligono);
+
+  const btn = document.getElementById("btnPoligono");
+  if(btn) btn.classList.remove("btn-poly-active");
+
+  redibujarPoligonoTemporal();
+  seleccionarPuntosDentroPoligono();
+}
+
+function seleccionarPuntosDentroPoligono(){
+  puntosDentroPoligono = [];
+
+  const registros = obtenerActividadesFiltradas();
+
+  registros.forEach(r=>{
+    const lat = parseFloat(String(obtenerValor(r,"LATITUDE")||"").replace(",","."));
+    const lng = parseFloat(String(obtenerValor(r,"LONGITUDE")||"").replace(",","."));
+
+    if(!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+
+    if(puntoDentroPoligono(lat,lng,puntosPoligono)){
+      puntosDentroPoligono.push(r);
+    }
+  });
+
+  resaltarPuntosPoligono();
+
+  mostrarInfoPoligono("Puntos dentro del polígono: " + puntosDentroPoligono.length + ". Puede exportarlos a Excel.");
+  alert("Puntos dentro del polígono: " + puntosDentroPoligono.length);
+}
+
+function resaltarPuntosPoligono(){
+  const itemsDentro = new Set(
+    puntosDentroPoligono.map(r=>obtenerValor(r,"ITEM"))
+  );
+
+  markers.forEach(obj=>{
+    const item = obtenerValor(obj.reg,"ITEM");
+    const el = obj.marker && obj.marker.getElement ? obj.marker.getElement() : null;
+
+    if(!el) return;
+
+    const dot = el.querySelector(".marker-dot");
+    if(!dot) return;
+
+    if(itemsDentro.has(item)){
+      dot.style.boxShadow = "0 0 0 5px rgba(37,99,235,.35), 0 2px 8px rgba(0,0,0,.35)";
+      dot.style.border = "3px solid #1d4ed8";
+    }else{
+      dot.style.boxShadow = "0 2px 8px rgba(0,0,0,.35)";
+      dot.style.border = "2px solid white";
+    }
+  });
+}
+
+function puntoDentroPoligono(lat,lng,poligono){
+  let dentro = false;
+
+  for(let i=0,j=poligono.length-1;i<poligono.length;j=i++){
+    const yi = poligono[i][0];
+    const xi = poligono[i][1];
+    const yj = poligono[j][0];
+    const xj = poligono[j][1];
+
+    const intersecta =
+      ((yi > lat) !== (yj > lat)) &&
+      (lng < ((xj - xi) * (lat - yi)) / ((yj - yi) || 0.0000000001) + xi);
+
+    if(intersecta) dentro = !dentro;
+  }
+
+  return dentro;
+}
+
+function limpiarPoligono(mostrarMensaje=true){
+  modoPoligono = false;
+  puntosPoligono = [];
+  puntosDentroPoligono = [];
+
+  if(map){
+    map.off("click", agregarPuntoPoligono);
+    map.off("dblclick", cerrarPoligono);
+  }
+
+  if(capaPoligono && map){
+    map.removeLayer(capaPoligono);
+    capaPoligono = null;
+  }
+
+  marcadoresPoligono.forEach(m=>{
+    if(map) map.removeLayer(m);
+  });
+  marcadoresPoligono = [];
+
+  const btn = document.getElementById("btnPoligono");
+  if(btn) btn.classList.remove("btn-poly-active");
+
+  ocultarInfoPoligono();
+
+  // Restaurar estilo de puntos.
+  markers.forEach(obj=>{
+    const el = obj.marker && obj.marker.getElement ? obj.marker.getElement() : null;
+    if(!el) return;
+    const dot = el.querySelector(".marker-dot");
+    if(!dot) return;
+    dot.style.boxShadow = "0 2px 8px rgba(0,0,0,.35)";
+    dot.style.border = "2px solid white";
+  });
+
+  if(mostrarMensaje) alert("Polígono limpiado.");
+}
+
+function exportarPuntosPoligono(){
+  if(!puntosDentroPoligono.length){
+    alert("No hay puntos seleccionados dentro del polígono.");
+    return;
+  }
+
+  if(typeof XLSX === "undefined"){
+    alert("No se cargó la librería de Excel.");
+    return;
+  }
+
+  const filas = puntosDentroPoligono.map(r=>({
+    ITEM: obtenerValor(r,"ITEM"),
+    ID_INSPECCION: obtenerValor(r,"ID_INSPECCION"),
+    ID: obtenerValor(r,"ID"),
+    ACTIVIDAD: obtenerValor(r,"ACTIVIDAD_NOMBRE"),
+    ID_ACTIVIDAD: obtenerValor(r,"ID_ACTIVIDAD"),
+    PRIORIDAD: obtenerValor(r,"PRIORIDAD"),
+    TIPO_CUADRILLA: obtenerValor(r,"TIPO_CUADRILLA"),
+    CANTIDAD: obtenerValor(r,"CANTIDAD"),
+    LATITUDE: obtenerValor(r,"LATITUDE"),
+    LONGITUDE: obtenerValor(r,"LONGITUDE"),
+    CUADRILLA: obtenerValor(r,"CUADRILLA"),
+    ESTADO: obtenerValor(r,"ESTADO"),
+    OBSERVACIONES: obtenerValor(r,"OBSERVACIONES"),
+    COORDENADAS: obtenerValor(r,"COORDENADAS"),
+    FOTO_1: obtenerValor(r,"FOTO_1"),
+    FOTO_2: obtenerValor(r,"FOTO_2"),
+    FOTO_3: obtenerValor(r,"FOTO_3")
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(filas);
+  ws["!cols"] = Object.keys(filas[0] || {}).map(h=>({
+    wch: Math.min(Math.max(h.length + 6, 14), 42)
+  }));
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,"PUNTOS_POLIGONO");
+
+  const idIns = inspeccion ? obtenerValor(inspeccion,"ID_INSPECCIONES") : "INSPECCION";
+  const fecha = new Date().toISOString().substring(0,10);
+
+  XLSX.writeFile(wb,`PUNTOS_POLIGONO_${idIns}_${fecha}.xlsx`);
+}
+
+function mostrarInfoPoligono(texto){
+  const el = document.getElementById("polyInfo");
+  if(!el) return;
+  el.textContent = texto || "";
+  el.classList.add("show");
+}
+
+function ocultarInfoPoligono(){
+  const el = document.getElementById("polyInfo");
+  if(!el) return;
+  el.textContent = "";
+  el.classList.remove("show");
+}
+
 function exportarExcel(){if(!inspeccion){alert("No hay inspección cargada.");return}const id=obtenerValor(inspeccion,"ID_INSPECCIONES"),circ=obtenerValor(inspeccion,"CIRCUITO_NOMBRE")||obtenerValor(inspeccion,"CIRCUITO");const columnas=["ITEM","ACTIVIDAD","PRIORIDAD","TIPO_CUADRILLA","CANTIDAD","LATITUDE","LONGITUDE","CUADRILLA","ESTADO","OBSERVACIONES","ID_INSPECCION","FOTO_1","FECHA_HORA_REGISTRO"];const filas=actividades.map(r=>({ITEM:obtenerValor(r,"ITEM"),ACTIVIDAD:obtenerValor(r,"ACTIVIDAD_NOMBRE"),PRIORIDAD:obtenerValor(r,"PRIORIDAD"),TIPO_CUADRILLA:obtenerValor(r,"TIPO_CUADRILLA"),CANTIDAD:obtenerValor(r,"CANTIDAD"),LATITUDE:obtenerValor(r,"LATITUDE"),LONGITUDE:obtenerValor(r,"LONGITUDE"),CUADRILLA:obtenerValor(r,"CUADRILLA"),ESTADO:obtenerValor(r,"ESTADO"),OBSERVACIONES:obtenerValor(r,"OBSERVACIONES"),ID_INSPECCION:obtenerValor(r,"ID_INSPECCION"),FOTO_1:obtenerValor(r,"FOTO_1"),FECHA_HORA_REGISTRO:obtenerValor(r,"FECHA_HORA_REGISTRO")}));const ws=XLSX.utils.json_to_sheet(filas,{header:columnas});filas.forEach((f,i)=>{const cell="L"+(i+2);if(f.FOTO_1)ws[cell].l={Target:f.FOTO_1,Tooltip:"Ver foto"}});ws["!cols"]=columnas.map(h=>({wch:Math.min(Math.max(h.length+6,14),45)}));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"ACTIVIDADES");XLSX.writeFile(wb,`INSPECCION_${id}_${circ}.xlsx`)}
 function exportarKML(){if(!inspeccion)return;const id=obtenerValor(inspeccion,"ID_INSPECCIONES"),circ=obtenerValor(inspeccion,"CIRCUITO_NOMBRE")||obtenerValor(inspeccion,"CIRCUITO");let kml=`<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>INSPECCION ${id}</name>`;actividades.forEach(r=>{const lat=obtenerValor(r,"LATITUDE"),lng=obtenerValor(r,"LONGITUDE");if(!lat||!lng)return;kml+=`<Placemark><name>ITEM ${xml(obtenerValor(r,"ITEM"))} - ${xml(obtenerValor(r,"ACTIVIDAD_NOMBRE"))}</name><description><![CDATA[<b>Estado:</b> ${escaparHtml(obtenerValor(r,"ESTADO"))}<br><b>Prioridad:</b> ${escaparHtml(obtenerValor(r,"PRIORIDAD"))}<br><b>Cantidad:</b> ${escaparHtml(obtenerValor(r,"CANTIDAD"))}<br><b>Observaciones:</b> ${escaparHtml(obtenerValor(r,"OBSERVACIONES"))}<br><b>Foto 1:</b> ${escaparHtml(obtenerValor(r,"FOTO_1"))}]]></description><Point><coordinates>${lng},${lat},0</coordinates></Point></Placemark>`});kml+=`</Document></kml>`;const blob=new Blob([kml],{type:"application/vnd.google-earth.kml+xml"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`INSPECCION_${id}_${circ}.kml`;document.body.appendChild(a);a.click();a.remove()}
 function togglePanelIzquierdo(){panelIzquierdoAbierto=!panelIzquierdoAbierto;document.getElementById("layout").classList.toggle("left-open",panelIzquierdoAbierto);setTimeout(()=>map.invalidateSize(),240)}
