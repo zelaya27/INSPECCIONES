@@ -549,13 +549,16 @@ function exportarPuntosPoligono(){
 const nombre = obtenerValor(inspeccion,"NOMBRE_INSPECCION");
 const circuito = obtenerValor(inspeccion,"CIRCUITO_NOMBRE") || obtenerValor(inspeccion,"CIRCUITO");
 
-const nombreArchivo =
-`INSPECCION_${id}_${nombre}_${circuito}`
+const nombreArchivo = (
+  "INSPECCION_" +
+  id + "_" +
+  nombre + "_" +
+  circuito
+)
+.normalize("NFD")
+.replace(/[\u0300-\u036f]/g,"")
 .replace(/[\\/:*?"<>|]/g,"")
 .replace(/\s+/g,"_");
-
-XLSX.writeFile(wb,nombreArchivo + ".xlsx");
-}
 
 function mostrarInfoPoligono(texto){
   const el = document.getElementById("polyInfo");
