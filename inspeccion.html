@@ -12,7 +12,7 @@
   <script src="config.js"></script>
   <style>
     :root{--primary:#556b2f;--primary-dark:#3f4f23;--primary-soft:#edf5e8;--bg:#f5f8f2;--card:#fff;--text:#0f172a;--muted:#64748b;--border:#dbe3d6;--success:#16a34a;--success-soft:#dcfce7;--danger:#dc2626;--danger-soft:#ffe4e6;--orange:#f59e0b;--shadow:0 12px 35px rgba(15,23,42,.08)}
-    *{box-sizing:border-box}body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}.topbar{height:54px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 14px;z-index:20}.left-actions,.right-info{display:flex;align-items:center;gap:8px}.btn{height:36px;border:1px solid var(--border);background:#fff;border-radius:9px;padding:0 12px;cursor:pointer;font-weight:900;display:inline-flex;align-items:center;gap:7px}.btn:hover{background:var(--primary-soft)}.btn-back{color:var(--primary)}.btn-excel{color:var(--success)}.btn-kml{color:var(--orange)}.btn-activities{color:#243016}.filter-select{height:36px;border:1px solid var(--border);background:#fff;border-radius:9px;padding:0 10px;font-weight:900;color:#243016;outline:none;max-width:170px}.filter-select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(85,107,47,.10)}.info-title{font-weight:900;color:#243016;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:850px}.legend-top{height:42px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:0 14px 0 52px;font-size:12px;font-weight:800;overflow-x:auto;white-space:nowrap}.legend-dot{width:13px;height:13px;border-radius:50%;display:inline-block;margin-right:5px;border:1px solid rgba(0,0,0,.12)}.layout{height:calc(100vh - 96px);display:grid;grid-template-columns:0 1fr 340px;transition:.2s}.layout.left-open{grid-template-columns:330px 1fr 340px}.map-wrap{position:relative;min-width:0}#map{width:100%;height:100%}.left-side{background:#fff;border-right:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}.left-side-content{padding:12px;overflow:auto}.right-side{background:#fff;border-left:1px solid var(--border);box-shadow:var(--shadow);overflow:auto}.panel-header{height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid var(--border);font-weight:900;color:#243016}.search-item{width:100%;height:38px;border:1px solid var(--border);border-radius:9px;padding:0 10px;margin-bottom:12px;outline:none}.summary-title{font-size:12px;color:var(--muted);font-weight:900;margin:8px 0}.summary-row{display:grid;grid-template-columns:20px 1fr 58px;align-items:center;gap:8px;padding:8px 6px;border-radius:8px;font-size:13px}.summary-row:hover{background:var(--primary-soft)}.summary-count{text-align:right;font-weight:900;color:var(--primary)}.item-row{padding:9px;border:1px solid var(--border);border-radius:9px;margin-bottom:8px;cursor:pointer}.item-row.active,.item-row:hover{background:var(--primary-soft);border-color:var(--primary)}.item-head{display:flex;justify-content:space-between;font-weight:900;font-size:13px}.item-sub{font-size:12px;color:var(--muted);margin-top:4px}.marker-dot{width:18px;height:18px;border-radius:50%;border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,.35)}.popup-title{font-weight:900;margin-bottom:4px}.popup-body{font-size:12px;line-height:1.35}.popup-thumb{width:118px;height:84px;object-fit:cover;border-radius:8px;border:1px solid var(--border);margin-top:7px;cursor:pointer;background:#f1f5f9}.popup-btn{margin-top:8px;border:none;background:var(--primary);color:white;border-radius:7px;height:30px;padding:0 10px;cursor:pointer;font-weight:900}.detail-empty{padding:24px;color:var(--muted);font-weight:800;text-align:center}.point-card{padding:14px}.main-photo{width:100%;height:190px;object-fit:cover;border-radius:14px;border:1px solid var(--border);background:#f1f5f9;cursor:pointer}.thumb-row{display:flex;gap:8px;margin-top:8px;overflow-x:auto}.thumb-row img{width:72px;height:58px;object-fit:cover;border-radius:9px;border:1px solid var(--border);cursor:pointer;background:#f1f5f9}.point-title{font-weight:900;font-size:18px;margin:12px 0 4px;color:#243016}.state-badge{display:inline-flex;padding:7px 10px;border-radius:8px;font-size:12px;font-weight:900;margin-bottom:10px}.state-pendiente{background:var(--danger-soft);color:var(--danger)}.state-ejecutado{background:var(--success-soft);color:var(--success)}.detail-row{display:grid;grid-template-columns:118px 1fr;gap:8px;margin-bottom:9px;font-size:13px}.detail-row strong{color:#243016}.detail-actions{display:grid;grid-template-columns:1fr 46px;gap:8px;margin-top:14px}.btn-run{background:var(--success);color:white;border:none;border-radius:10px;height:42px;font-weight:900;cursor:pointer}.btn-run:hover{filter:brightness(.95)}.btn-trash{background:#fff;border:1px solid var(--danger);color:var(--danger);border-radius:10px;height:42px;font-weight:900;cursor:pointer}.btn-trash:hover{background:var(--danger-soft)}.photo-modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.86);z-index:9999;align-items:center;justify-content:center;padding:20px}.photo-modal.show{display:flex}.photo-modal img{max-width:96vw;max-height:88vh;border-radius:12px;background:#fff}.photo-close{position:fixed;top:14px;right:18px;width:42px;height:42px;border:none;border-radius:50%;background:#fff;color:var(--danger);font-size:24px;font-weight:900;cursor:pointer}.saving{opacity:.55;pointer-events:none}@media(max-width:1100px){.layout,.layout.left-open{grid-template-columns:1fr}.left-side{display:none}.right-side{display:none}.info-title{max-width:420px}.legend-top{padding-left:14px}}
+    *{box-sizing:border-box}body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}.topbar{height:54px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 14px;z-index:20}.filterbar{height:50px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;padding:0 14px 0 52px;z-index:19;overflow-x:auto}.filterbar .filter-select{max-width:210px}.btn-back{background:var(--danger);border-color:var(--danger);color:white}.btn-back:hover{background:var(--danger);filter:brightness(.94)}.left-actions,.right-info{display:flex;align-items:center;gap:8px}.btn{height:36px;border:1px solid var(--border);background:#fff;border-radius:9px;padding:0 12px;cursor:pointer;font-weight:900;display:inline-flex;align-items:center;gap:7px}.btn:hover{background:var(--primary-soft)}.btn-excel{color:var(--success)}.btn-kml{color:var(--orange)}.btn-activities{color:#243016}.filter-select{height:36px;border:1px solid var(--border);background:#fff;border-radius:9px;padding:0 10px;font-weight:900;color:#243016;outline:none;max-width:170px}.filter-select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(85,107,47,.10)}.info-title{font-weight:900;color:#243016;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:850px}.legend-top{height:42px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:0 14px 0 52px;font-size:12px;font-weight:800;overflow-x:auto;white-space:nowrap}.legend-dot{width:13px;height:13px;border-radius:50%;display:inline-block;margin-right:5px;border:1px solid rgba(0,0,0,.12)}.layout{height:calc(100vh - 146px);display:grid;grid-template-columns:0 1fr 340px;transition:.2s}.layout.left-open{grid-template-columns:330px 1fr 340px}.map-wrap{position:relative;min-width:0}.poly-close-control{display:none;position:absolute;top:14px;right:14px;z-index:900;background:#2563eb;color:white;border:none;border-radius:10px;height:42px;padding:0 14px;font-weight:900;cursor:pointer;box-shadow:0 8px 22px rgba(15,23,42,.25)}.poly-close-control.show{display:inline-flex;align-items:center;gap:8px}.poly-close-control:hover{filter:brightness(.95)}#map{width:100%;height:100%}.left-side{background:#fff;border-right:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}.left-side-content{padding:12px;overflow:auto}.right-side{background:#fff;border-left:1px solid var(--border);box-shadow:var(--shadow);overflow:auto}.panel-header{height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid var(--border);font-weight:900;color:#243016}.search-item{width:100%;height:38px;border:1px solid var(--border);border-radius:9px;padding:0 10px;margin-bottom:12px;outline:none}.summary-title{font-size:12px;color:var(--muted);font-weight:900;margin:8px 0}.summary-row{display:grid;grid-template-columns:20px 1fr 58px;align-items:center;gap:8px;padding:8px 6px;border-radius:8px;font-size:13px}.summary-row:hover{background:var(--primary-soft)}.summary-count{text-align:right;font-weight:900;color:var(--primary)}.item-row{padding:9px;border:1px solid var(--border);border-radius:9px;margin-bottom:8px;cursor:pointer}.item-row.active,.item-row:hover{background:var(--primary-soft);border-color:var(--primary)}.item-head{display:flex;justify-content:space-between;font-weight:900;font-size:13px}.item-sub{font-size:12px;color:var(--muted);margin-top:4px}.marker-dot{width:18px;height:18px;border-radius:50%;border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,.35)}.popup-title{font-weight:900;margin-bottom:4px}.popup-body{font-size:12px;line-height:1.35}.popup-thumb{width:118px;height:84px;object-fit:cover;border-radius:8px;border:1px solid var(--border);margin-top:7px;cursor:pointer;background:#f1f5f9}.popup-btn{margin-top:8px;border:none;background:var(--primary);color:white;border-radius:7px;height:30px;padding:0 10px;cursor:pointer;font-weight:900}.detail-empty{padding:24px;color:var(--muted);font-weight:800;text-align:center}.point-card{padding:14px}.main-photo{width:100%;height:190px;object-fit:cover;border-radius:14px;border:1px solid var(--border);background:#f1f5f9;cursor:pointer}.thumb-row{display:flex;gap:8px;margin-top:8px;overflow-x:auto}.thumb-row img{width:72px;height:58px;object-fit:cover;border-radius:9px;border:1px solid var(--border);cursor:pointer;background:#f1f5f9}.point-title{font-weight:900;font-size:18px;margin:12px 0 4px;color:#243016}.state-badge{display:inline-flex;padding:7px 10px;border-radius:8px;font-size:12px;font-weight:900;margin-bottom:10px}.state-pendiente{background:var(--danger-soft);color:var(--danger)}.state-ejecutado{background:var(--success-soft);color:var(--success)}.detail-row{display:grid;grid-template-columns:118px 1fr;gap:8px;margin-bottom:9px;font-size:13px}.detail-row strong{color:#243016}.detail-actions{display:grid;grid-template-columns:1fr 46px;gap:8px;margin-top:14px}.btn-run{background:var(--success);color:white;border:none;border-radius:10px;height:42px;font-weight:900;cursor:pointer}.btn-run:hover{filter:brightness(.95)}.btn-trash{background:#fff;border:1px solid var(--danger);color:var(--danger);border-radius:10px;height:42px;font-weight:900;cursor:pointer}.btn-trash:hover{background:var(--danger-soft)}.photo-modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,.86);z-index:9999;align-items:center;justify-content:center;padding:20px}.photo-modal.show{display:flex}.photo-modal img{max-width:96vw;max-height:88vh;border-radius:12px;background:#fff}.photo-close{position:fixed;top:14px;right:18px;width:42px;height:42px;border:none;border-radius:50%;background:#fff;color:var(--danger);font-size:24px;font-weight:900;cursor:pointer}.saving{opacity:.55;pointer-events:none}@media(max-width:1100px){.layout,.layout.left-open{grid-template-columns:1fr}.left-side{display:none}.right-side{display:none}.info-title{max-width:420px}.legend-top{padding-left:14px}}
   
     .btn-poly{color:#2563eb}
     .btn-poly-active{background:#dbeafe;color:#1d4ed8;border-color:#93c5fd}
@@ -40,7 +40,25 @@
   </style>
 </head>
 <body>
-  <div class="topbar"><div class="left-actions"><button class="btn btn-back" onclick="volver()"><i class="fas fa-arrow-left"></i> Volver</button><button class="btn btn-excel" onclick="exportarExcel()"><i class="fas fa-file-excel"></i> Excel</button><button class="btn btn-kml" onclick="exportarKML()"><i class="fas fa-globe-americas"></i> KML</button><button class="btn btn-poly" id="btnPoligono" onclick="activarPoligono()"><i class="fas fa-draw-polygon"></i> Polígono</button><button class="btn btn-excel" onclick="exportarPuntosPoligono()"><i class="fas fa-file-excel"></i> Exportar Polígono</button><button class="btn" onclick="limpiarPoligono()" title="Limpiar polígono"><i class="fas fa-eraser"></i></button><button class="btn btn-activities" onclick="togglePanelIzquierdo()"><i class="fas fa-bars"></i> Actividades</button><select id="filtroPrioridadPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Prioridad: Todas</option></select><select id="filtroActividadPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Actividad: Todas</option></select><select id="filtroEstadoPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Estado: Todos</option></select><select id="filtroCuadrillaPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Tipo Cuadrilla: Todas</option></select><button class="btn" onclick="limpiarFiltrosPuntos()"><i class="fas fa-sync-alt"></i></button></div><div class="right-info"><div class="info-title" id="tituloInspeccion">Cargando inspección...</div></div></div>
+  <div class="topbar">
+    <div class="left-actions">
+      <button class="btn btn-back" onclick="volver()"><i class="fas fa-arrow-left"></i> Volver</button>
+      <button class="btn btn-excel" onclick="exportarExcel()"><i class="fas fa-file-excel"></i> Exportar Todo</button>
+      <button class="btn btn-kml" onclick="exportarKML()"><i class="fas fa-globe-americas"></i> KML</button>
+      <button class="btn btn-poly" id="btnPoligono" onclick="activarPoligono()"><i class="fas fa-draw-polygon"></i> Polígono</button>
+      <button class="btn" onclick="limpiarPoligono()"><i class="fas fa-eraser"></i> Limpiar Polígono</button>
+      <button class="btn btn-excel" onclick="exportarPuntosPoligono()"><i class="fas fa-file-excel"></i> Exportar Polígono</button>
+      <button class="btn btn-activities" onclick="togglePanelIzquierdo()"><i class="fas fa-bars"></i> Actividades</button>
+    </div>
+    <div class="right-info"><div class="info-title" id="tituloInspeccion">Cargando inspección...</div></div>
+  </div>
+  <div class="filterbar">
+    <select id="filtroPrioridadPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Prioridad: Todas</option></select>
+    <select id="filtroActividadPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Actividad: Todas</option></select>
+    <select id="filtroEstadoPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Estado: Todos</option></select>
+    <select id="filtroCuadrillaPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Tipo Cuadrilla: Todas</option></select>
+    <button class="btn" onclick="limpiarFiltrosPuntos()"><i class="fas fa-sync-alt"></i> Limpiar Filtros</button>
+  </div>
   <div class="legend-top" id="leyendaTop"></div>
   <div class="layout" id="layout">
     <aside class="left-side" id="leftSide"><div class="panel-header"><span><i class="fas fa-list"></i> ACTIVIDADES</span><button class="btn" onclick="togglePanelIzquierdo()"><i class="fas fa-times"></i></button></div><div class="left-side-content"><input id="buscarItem" class="search-item" placeholder="Buscar ITEM..." oninput="pintarListaItems()"><div class="summary-title">Totales por actividad</div><div id="resumenActividades"></div><div class="summary-title">Items</div><div id="listaItems"></div></div></aside>
@@ -242,10 +260,11 @@ function activarPoligono(){
   const btn = document.getElementById("btnPoligono");
   if(btn) btn.classList.add("btn-poly-active");
 
-  mostrarInfoPoligono("Modo polígono activo: haga clic en el mapa para marcar puntos. Doble clic para cerrar y seleccionar.");
+  mostrarInfoPoligono("Modo polígono activo: clic izquierdo agrega puntos, clic derecho deshace el último punto. Use el botón Cerrar Polígono para finalizar.");
 
+  mostrarBotonCerrarPoligono(true);
   map.on("click", agregarPuntoPoligono);
-  map.on("dblclick", cerrarPoligono);
+  map.on("contextmenu", deshacerPuntoPoligono);
 }
 
 function agregarPuntoPoligono(e){
@@ -270,7 +289,7 @@ function agregarPuntoPoligono(e){
 
   mostrarInfoPoligono(
     "Puntos del polígono: " + puntosPoligono.length +
-    ". Doble clic para cerrar."
+    ". Use el botón Cerrar Polígono para finalizar."
   );
 }
 
@@ -304,6 +323,43 @@ function redibujarPoligonoTemporal(){
   }).addTo(map);
 }
 
+function cerrarPoligonoDesdeBoton(){
+  cerrarPoligono();
+}
+
+function mostrarBotonCerrarPoligono(mostrar){
+  const btn = document.getElementById("btnCerrarPoligonoMapa");
+  if(!btn) return;
+  btn.classList.toggle("show", !!mostrar);
+}
+
+function deshacerPuntoPoligono(e){
+  if(!modoPoligono) return;
+
+  if(e && e.originalEvent){
+    L.DomEvent.stop(e);
+  }
+
+  if(!puntosPoligono.length){
+    mostrarInfoPoligono("No hay puntos para deshacer.");
+    return;
+  }
+
+  puntosPoligono.pop();
+
+  const ultimoMarcador = marcadoresPoligono.pop();
+  if(ultimoMarcador && map){
+    map.removeLayer(ultimoMarcador);
+  }
+
+  redibujarPoligonoTemporal();
+
+  mostrarInfoPoligono(
+    "Puntos del polígono: " + puntosPoligono.length +
+    ". Clic izquierdo agrega, clic derecho deshace. Use Cerrar Polígono para finalizar."
+  );
+}
+
 function cerrarPoligono(e){
   if(!modoPoligono) return;
 
@@ -319,10 +375,11 @@ function cerrarPoligono(e){
   modoPoligono = false;
 
   map.off("click", agregarPuntoPoligono);
-  map.off("dblclick", cerrarPoligono);
+  map.off("contextmenu", deshacerPuntoPoligono);
 
   const btn = document.getElementById("btnPoligono");
   if(btn) btn.classList.remove("btn-poly-active");
+  mostrarBotonCerrarPoligono(false);
 
   redibujarPoligonoTemporal();
   seleccionarPuntosDentroPoligono();
@@ -400,7 +457,7 @@ function limpiarPoligono(mostrarMensaje=true){
 
   if(map){
     map.off("click", agregarPuntoPoligono);
-    map.off("dblclick", cerrarPoligono);
+    map.off("contextmenu", deshacerPuntoPoligono);
   }
 
   if(capaPoligono && map){
@@ -415,6 +472,7 @@ function limpiarPoligono(mostrarMensaje=true){
 
   const btn = document.getElementById("btnPoligono");
   if(btn) btn.classList.remove("btn-poly-active");
+  mostrarBotonCerrarPoligono(false);
 
   ocultarInfoPoligono();
 
