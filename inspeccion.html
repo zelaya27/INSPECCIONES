@@ -532,15 +532,29 @@ function exportarPuntosPoligono(){
     wch: Math.min(Math.max(h.length + 6, 14), 45)
   }));
 
-  filas.forEach((f, i) => {
-    const cell = "L" + (i + 2);
-    if(f.FOTO_1 && ws[cell]){
-      ws[cell].l = {
-        Target: f.FOTO_1,
-        Tooltip: "Ver foto"
-      };
-    }
-  });
+filas.forEach((f,i)=>{
+
+  // Columna A = ITEM
+  const cellItem = "A" + (i + 2);
+
+  if(f.LATITUDE && f.LONGITUDE && ws[cellItem]){
+    ws[cellItem].l = {
+      Target: `https://www.google.com/maps?q=${f.LATITUDE},${f.LONGITUDE}`,
+      Tooltip: "Ver ubicación en Google Maps"
+    };
+  }
+
+  // Columna L = FOTO_1
+  const cellFoto = "L" + (i + 2);
+
+  if(f.FOTO_1 && ws[cellFoto]){
+    ws[cellFoto].l = {
+      Target: f.FOTO_1,
+      Tooltip: "Ver foto"
+    };
+  }
+
+});
 
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, "PUNTOS_POLIGONO");
@@ -662,15 +676,29 @@ for(const r of puntosDentroPoligono){
 
   const ws = XLSX.utils.json_to_sheet(filas,{header:columnas});
 
-  filas.forEach((f,i)=>{
-    const cell = "L" + (i + 2);
-    if(f.FOTO_1 && ws[cell]){
-      ws[cell].l = {
-        Target: f.FOTO_1,
-        Tooltip: "Ver foto"
-      };
-    }
-  });
+filas.forEach((f,i)=>{
+
+  // Columna A = ITEM
+  const cellItem = "A" + (i + 2);
+
+  if(f.LATITUDE && f.LONGITUDE && ws[cellItem]){
+    ws[cellItem].l = {
+      Target: `https://www.google.com/maps?q=${f.LATITUDE},${f.LONGITUDE}`,
+      Tooltip: "Ver ubicación en Google Maps"
+    };
+  }
+
+  // Columna L = FOTO_1
+  const cellFoto = "L" + (i + 2);
+
+  if(f.FOTO_1 && ws[cellFoto]){
+    ws[cellFoto].l = {
+      Target: f.FOTO_1,
+      Tooltip: "Ver foto"
+    };
+  }
+
+});
 
   ws["!cols"] = columnas.map(h => ({
     wch: Math.min(Math.max(h.length + 6, 14), 45)
