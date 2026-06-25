@@ -12,7 +12,20 @@
   <script src="config.js"></script>
   <style>
     :root{--primary:#556b2f;--primary-dark:#3f4f23;--primary-soft:#edf5e8;--bg:#f5f8f2;--card:#fff;--text:#0f172a;--muted:#64748b;--border:#dbe3d6;--success:#16a34a;--success-soft:#dcfce7;--danger:#dc2626;--danger-soft:#ffe4e6;--orange:#f59e0b;--shadow:0 12px 35px rgba(15,23,42,.08)}
-    *{box-sizing:border-box}body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}.topbar{height:54px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 14px;z-index:20}.filterbar{height:50px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;padding:0 14px 0 52px;z-index:19;overflow-x:auto}.filterbar .filter-select{max-width:210px}.btn-back{background:var(--danger);border-color:var(--danger);color:white}.btn-back:hover{background:var(--danger);filter:brightness(.94)}.left-actions,.right-info{display:flex;align-items:center;gap:8px}.btn{height:36px;border:1px solid var(--border);background:#fff;border-radius:9px;padding:0 12px;cursor:pointer;font-weight:900;display:inline-flex;align-items:center;gap:7px}.btn:hover{background:var(--primary-soft)}.btn-excel{color:var(--success)}.btn-kml{color:var(--orange)}.btn-activities{color:#243016}.filter-select{height:36px;border:1px solid var(--border);background:#fff;border-radius:9px;padding:0 10px;font-weight:900;color:#243016;outline:none;max-width:170px}.filter-select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(85,107,47,.10)}.info-title{font-weight:900;color:#243016;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:850px}.legend-top{height:42px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:0 14px 0 52px;font-size:12px;font-weight:800;overflow-x:auto;white-space:nowrap}.legend-dot{width:13px;height:13px;border-radius:50%;display:inline-block;margin-right:5px;border:1px solid rgba(0,0,0,.12)}.layout{height:calc(100vh - 146px);display:grid;grid-template-columns:0 1fr 340px;transition:.2s}.layout.left-open{grid-template-columns:330px 1fr 340px}.map-wrap{position:relative;min-width:0}
+    *{box-sizing:border-box}body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}.topbar{height:54px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 14px;z-index:20}.filterbar{height:50px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;padding:0 14px 0 52px;z-index:19;overflow-x:auto}.filterbar .filter-select{max-width:210px}
+.btn-back{
+    background:#dc2626;
+    border-color:#dc2626;
+    color:#000;
+    font-weight:900;
+}
+
+.btn-back:hover{
+    background:#b91c1c;
+    border-color:#b91c1c;
+    color:#000;
+}
+    .left-actions,.right-info{display:flex;align-items:center;gap:8px}.btn{height:36px;border:1px solid var(--border);background:#fff;border-radius:9px;padding:0 12px;cursor:pointer;font-weight:900;display:inline-flex;align-items:center;gap:7px}.btn:hover{background:var(--primary-soft)}.btn-excel{color:var(--success)}.btn-kml{color:var(--orange)}.btn-activities{color:#243016}.filter-select{height:36px;border:1px solid var(--border);background:#fff;border-radius:9px;padding:0 10px;font-weight:900;color:#243016;outline:none;max-width:170px}.filter-select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(85,107,47,.10)}.info-title{font-weight:900;color:#243016;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:850px}.legend-top{height:42px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:0 14px 0 52px;font-size:12px;font-weight:800;overflow-x:auto;white-space:nowrap}.legend-dot{width:13px;height:13px;border-radius:50%;display:inline-block;margin-right:5px;border:1px solid rgba(0,0,0,.12)}.layout{height:calc(100vh - 146px);display:grid;grid-template-columns:0 1fr 340px;transition:.2s}.layout.left-open{grid-template-columns:330px 1fr 340px}.map-wrap{position:relative;min-width:0}
     .poly-close-control{
   display:none;
   position:absolute;
@@ -48,7 +61,7 @@
 <body>
   <div class="topbar">
     <div class="left-actions">
-      <button class="btn btn-back" onclick="volver()"><i class="fas fa-arrow-left"></i> Volver</button>
+      <button class="" onclick="volver()"><i class="fas fa-arrow-left"></i> Volver</button>
       <button
     id="btnExportarTodo"
     class="btn btn-excel"
@@ -564,10 +577,14 @@ async function exportarPuntosPoligono(btn){
   XLSX.utils.book_append_sheet(wb, ws, "PUNTOS_POLIGONO");
 
   XLSX.writeFile(wb, nombreArchivoInspeccion() + ".xlsx");
-
-  setEstadoBoton(btn,false);
 }
+finally{
 
+        setEstadoBoton(btn,false);
+
+    }
+
+}
 function mostrarInfoPoligono(texto){
   const el = document.getElementById("polyInfo");
   if(!el) return;
@@ -742,9 +759,15 @@ async function exportarExcel(btn){
   XLSX.utils.book_append_sheet(wb, ws, "ACTIVIDADES");
 
   XLSX.writeFile(wb, nombreArchivoInspeccion() + ".xlsx");
-  setEstadoBoton(btn,false);
+ 
 }
-  
+  finally{
+
+        setEstadoBoton(btn,false);
+
+    }
+
+}
 function setEstadoBoton(btn, cargando, textoOriginal){
 
   if(!btn) return;
@@ -771,7 +794,13 @@ function setEstadoBoton(btn, cargando, textoOriginal){
 
 }
 function exportarKML(btn){ setEstadoBoton(btn,true); if(!inspeccion)return;const id=obtenerValor(inspeccion,"ID_INSPECCIONES"),circ=obtenerValor(inspeccion,"CIRCUITO_NOMBRE")||obtenerValor(inspeccion,"CIRCUITO");let kml=`<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>INSPECCION ${id}</name>`;actividades.forEach(r=>{const lat=obtenerValor(r,"LATITUDE"),lng=obtenerValor(r,"LONGITUDE");if(!lat||!lng)return;kml+=`<Placemark><name>ITEM ${xml(obtenerValor(r,"ITEM"))} - ${xml(obtenerValor(r,"ACTIVIDAD_NOMBRE"))}</name><description><![CDATA[<b>Estado:</b> ${escaparHtml(obtenerValor(r,"ESTADO"))}<br><b>Prioridad:</b> ${escaparHtml(obtenerValor(r,"PRIORIDAD"))}<br><b>Cantidad:</b> ${escaparHtml(obtenerValor(r,"CANTIDAD"))}<br><b>Observaciones:</b> ${escaparHtml(obtenerValor(r,"OBSERVACIONES"))}<br><b>Foto 1:</b> ${escaparHtml(obtenerValor(r,"FOTO_1"))}]]></description><Point><coordinates>${lng},${lat},0</coordinates></Point></Placemark>`});kml+=`</Document></kml>`;const blob=new Blob([kml],{type:"application/vnd.google-earth.kml+xml"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`INSPECCION_${id}_${circ}.kml`;document.body.appendChild(a);a.click();a.remove() 
-                        setEstadoBoton(btn,false); }
+                        }finally{
+
+        setEstadoBoton(btn,false);
+
+    }
+
+}
 function togglePanelIzquierdo(){panelIzquierdoAbierto=!panelIzquierdoAbierto;document.getElementById("layout").classList.toggle("left-open",panelIzquierdoAbierto);setTimeout(()=>map.invalidateSize(),240)}
 function volver(){window.location.href="panel.html"}function normalizarTextoSimple(v){return String(v||"").trim().toUpperCase().replace(/\s+/g," ")}function obtenerValor(r,c){return String((r&&r.obj&&r.obj[c])??"").trim()}function normalizarEstado(e){return String(e||"PENDIENTE").trim().toUpperCase()==="EJECUTADO"?"EJECUTADO":"PENDIENTE"}function escaparHtml(t){return String(t??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}function escaparAtributo(t){return String(t??"").replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/"/g,"&quot;").replace(/\n/g," ")}function xml(t){return String(t??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
 </script>
