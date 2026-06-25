@@ -61,7 +61,7 @@
 <body>
   <div class="topbar">
     <div class="left-actions">
-      <button class="" onclick="volver()"><i class="fas fa-arrow-left"></i> Volver</button>
+      <button class="btn btn-back" onclick="volver()"><i class="fas fa-arrow-left"></i> Volver</button>
       <button
     id="btnExportarTodo"
     class="btn btn-excel"
@@ -521,69 +521,68 @@ function limpiarPoligono(mostrarMensaje=true){
 
 async function exportarPuntosPoligono(btn){
   setEstadoBoton(btn,true);
-  if(!puntosDentroPoligono.length){
-    alert("No hay puntos seleccionados dentro del polígono.");
-    return;
-  }
 
-  const columnas = [
-    "ITEM",
-    "ACTIVIDAD",
-    "PRIORIDAD",
-    "TIPO_CUADRILLA",
-    "CANTIDAD",
-    "LATITUDE",
-    "LONGITUDE",
-    "CUADRILLA",
-    "ESTADO",
-    "OBSERVACIONES",
-    "ID_INSPECCION",
-    "FOTO_1",
-    "FECHA_HORA_REGISTRO"
-  ];
-
-  const filas = [];
-
-  for(const r of puntosDentroPoligono){
-    const fotoOriginal = obtenerValor(r,"FOTO_1");
-    const fotoUrl = await obtenerUrlFotoExportacion(fotoOriginal);
-
-    filas.push({
-      ITEM: obtenerValor(r,"ITEM"),
-      ACTIVIDAD: obtenerValor(r,"ACTIVIDAD_NOMBRE"),
-      PRIORIDAD: obtenerValor(r,"PRIORIDAD"),
-      TIPO_CUADRILLA: obtenerValor(r,"TIPO_CUADRILLA"),
-      CANTIDAD: obtenerValor(r,"CANTIDAD"),
-      LATITUDE: obtenerValor(r,"LATITUDE"),
-      LONGITUDE: obtenerValor(r,"LONGITUDE"),
-      CUADRILLA: obtenerValor(r,"CUADRILLA"),
-      ESTADO: obtenerValor(r,"ESTADO"),
-      OBSERVACIONES: obtenerValor(r,"OBSERVACIONES"),
-      ID_INSPECCION: obtenerValor(r,"ID_INSPECCION"),
-      FOTO_1: fotoUrl,
-      FECHA_HORA_REGISTRO: formatearFechaHora(obtenerValor(r,"FECHA_HORA_REGISTRO"))
-    });
-  }
-
-  const ws = XLSX.utils.json_to_sheet(filas,{header:columnas});
-
-  agregarLinksExcel(ws,filas);
-
-  ws["!cols"] = columnas.map(h => ({
-    wch: Math.min(Math.max(h.length + 6, 14), 45)
-  }));
-
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "PUNTOS_POLIGONO");
-
-  XLSX.writeFile(wb, nombreArchivoInspeccion() + ".xlsx");
-}
-finally{
-
-        setEstadoBoton(btn,false);
-
+  try{
+    if(!puntosDentroPoligono.length){
+      alert("No hay puntos seleccionados dentro del polígono.");
+      return;
     }
 
+    const columnas = [
+      "ITEM",
+      "ACTIVIDAD",
+      "PRIORIDAD",
+      "TIPO_CUADRILLA",
+      "CANTIDAD",
+      "LATITUDE",
+      "LONGITUDE",
+      "CUADRILLA",
+      "ESTADO",
+      "OBSERVACIONES",
+      "ID_INSPECCION",
+      "FOTO_1",
+      "FECHA_HORA_REGISTRO"
+    ];
+
+    const filas = [];
+
+    for(const r of puntosDentroPoligono){
+      const fotoOriginal = obtenerValor(r,"FOTO_1");
+      const fotoUrl = await obtenerUrlFotoExportacion(fotoOriginal);
+
+      filas.push({
+        ITEM: obtenerValor(r,"ITEM"),
+        ACTIVIDAD: obtenerValor(r,"ACTIVIDAD_NOMBRE"),
+        PRIORIDAD: obtenerValor(r,"PRIORIDAD"),
+        TIPO_CUADRILLA: obtenerValor(r,"TIPO_CUADRILLA"),
+        CANTIDAD: obtenerValor(r,"CANTIDAD"),
+        LATITUDE: obtenerValor(r,"LATITUDE"),
+        LONGITUDE: obtenerValor(r,"LONGITUDE"),
+        CUADRILLA: obtenerValor(r,"CUADRILLA"),
+        ESTADO: obtenerValor(r,"ESTADO"),
+        OBSERVACIONES: obtenerValor(r,"OBSERVACIONES"),
+        ID_INSPECCION: obtenerValor(r,"ID_INSPECCION"),
+        FOTO_1: fotoUrl,
+        FECHA_HORA_REGISTRO: formatearFechaHora(obtenerValor(r,"FECHA_HORA_REGISTRO"))
+      });
+    }
+
+    const ws = XLSX.utils.json_to_sheet(filas,{header:columnas});
+
+    agregarLinksExcel(ws,filas);
+
+    ws["!cols"] = columnas.map(h => ({
+      wch: Math.min(Math.max(h.length + 6, 14), 45)
+    }));
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "PUNTOS_POLIGONO");
+
+    XLSX.writeFile(wb, nombreArchivoInspeccion() + ".xlsx");
+
+  }finally{
+    setEstadoBoton(btn,false);
+  }
 }
 function mostrarInfoPoligono(texto){
   const el = document.getElementById("polyInfo");
@@ -701,72 +700,69 @@ function formatearFechaHora(fecha){
   return fecha;
 }
 async function exportarExcel(btn){
-
   setEstadoBoton(btn,true);
-  if(!inspeccion){
-    alert("No hay inspección cargada.");
-    return;
-  }
 
-  const columnas = [
-    "ITEM",
-    "ACTIVIDAD",
-    "PRIORIDAD",
-    "TIPO_CUADRILLA",
-    "CANTIDAD",
-    "LATITUDE",
-    "LONGITUDE",
-    "CUADRILLA",
-    "ESTADO",
-    "OBSERVACIONES",
-    "ID_INSPECCION",
-    "FOTO_1",
-    "FECHA_HORA_REGISTRO"
-  ];
-
-  const filas = [];
-
-  for(const r of actividades){
-    const fotoOriginal = obtenerValor(r,"FOTO_1");
-    const fotoUrl = await obtenerUrlFotoExportacion(fotoOriginal);
-
-    filas.push({
-      ITEM: obtenerValor(r,"ITEM"),
-      ACTIVIDAD: obtenerValor(r,"ACTIVIDAD_NOMBRE"),
-      PRIORIDAD: obtenerValor(r,"PRIORIDAD"),
-      TIPO_CUADRILLA: obtenerValor(r,"TIPO_CUADRILLA"),
-      CANTIDAD: obtenerValor(r,"CANTIDAD"),
-      LATITUDE: obtenerValor(r,"LATITUDE"),
-      LONGITUDE: obtenerValor(r,"LONGITUDE"),
-      CUADRILLA: obtenerValor(r,"CUADRILLA"),
-      ESTADO: obtenerValor(r,"ESTADO"),
-      OBSERVACIONES: obtenerValor(r,"OBSERVACIONES"),
-      ID_INSPECCION: obtenerValor(r,"ID_INSPECCION"),
-      FOTO_1: fotoUrl,
-      FECHA_HORA_REGISTRO: formatearFechaHora(obtenerValor(r,"FECHA_HORA_REGISTRO"))
-    });
-  }
-
-  const ws = XLSX.utils.json_to_sheet(filas,{header:columnas});
-
-  agregarLinksExcel(ws,filas);
-
-  ws["!cols"] = columnas.map(h => ({
-    wch: Math.min(Math.max(h.length + 6, 14), 45)
-  }));
-
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "ACTIVIDADES");
-
-  XLSX.writeFile(wb, nombreArchivoInspeccion() + ".xlsx");
- 
-}
-  finally{
-
-        setEstadoBoton(btn,false);
-
+  try{
+    if(!inspeccion){
+      alert("No hay inspección cargada.");
+      return;
     }
 
+    const columnas = [
+      "ITEM",
+      "ACTIVIDAD",
+      "PRIORIDAD",
+      "TIPO_CUADRILLA",
+      "CANTIDAD",
+      "LATITUDE",
+      "LONGITUDE",
+      "CUADRILLA",
+      "ESTADO",
+      "OBSERVACIONES",
+      "ID_INSPECCION",
+      "FOTO_1",
+      "FECHA_HORA_REGISTRO"
+    ];
+
+    const filas = [];
+
+    for(const r of actividades){
+      const fotoOriginal = obtenerValor(r,"FOTO_1");
+      const fotoUrl = await obtenerUrlFotoExportacion(fotoOriginal);
+
+      filas.push({
+        ITEM: obtenerValor(r,"ITEM"),
+        ACTIVIDAD: obtenerValor(r,"ACTIVIDAD_NOMBRE"),
+        PRIORIDAD: obtenerValor(r,"PRIORIDAD"),
+        TIPO_CUADRILLA: obtenerValor(r,"TIPO_CUADRILLA"),
+        CANTIDAD: obtenerValor(r,"CANTIDAD"),
+        LATITUDE: obtenerValor(r,"LATITUDE"),
+        LONGITUDE: obtenerValor(r,"LONGITUDE"),
+        CUADRILLA: obtenerValor(r,"CUADRILLA"),
+        ESTADO: obtenerValor(r,"ESTADO"),
+        OBSERVACIONES: obtenerValor(r,"OBSERVACIONES"),
+        ID_INSPECCION: obtenerValor(r,"ID_INSPECCION"),
+        FOTO_1: fotoUrl,
+        FECHA_HORA_REGISTRO: formatearFechaHora(obtenerValor(r,"FECHA_HORA_REGISTRO"))
+      });
+    }
+
+    const ws = XLSX.utils.json_to_sheet(filas,{header:columnas});
+
+    agregarLinksExcel(ws,filas);
+
+    ws["!cols"] = columnas.map(h => ({
+      wch: Math.min(Math.max(h.length + 6, 14), 45)
+    }));
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "ACTIVIDADES");
+
+    XLSX.writeFile(wb, nombreArchivoInspeccion() + ".xlsx");
+
+  }finally{
+    setEstadoBoton(btn,false);
+  }
 }
 function setEstadoBoton(btn, cargando, textoOriginal){
 
@@ -778,8 +774,8 @@ function setEstadoBoton(btn, cargando, textoOriginal){
     btn.dataset.texto = textoOriginal || btn.innerHTML;
 
     btn.innerHTML = `
-      <i class="fas fa-spinner fa-spin"></i>
-      Cargando...
+      <i class="fas fa-circle-notch fa-spin"></i>
+      Generando...
     `;
 
   }else{
@@ -793,13 +789,42 @@ function setEstadoBoton(btn, cargando, textoOriginal){
   }
 
 }
-function exportarKML(btn){ setEstadoBoton(btn,true); if(!inspeccion)return;const id=obtenerValor(inspeccion,"ID_INSPECCIONES"),circ=obtenerValor(inspeccion,"CIRCUITO_NOMBRE")||obtenerValor(inspeccion,"CIRCUITO");let kml=`<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>INSPECCION ${id}</name>`;actividades.forEach(r=>{const lat=obtenerValor(r,"LATITUDE"),lng=obtenerValor(r,"LONGITUDE");if(!lat||!lng)return;kml+=`<Placemark><name>ITEM ${xml(obtenerValor(r,"ITEM"))} - ${xml(obtenerValor(r,"ACTIVIDAD_NOMBRE"))}</name><description><![CDATA[<b>Estado:</b> ${escaparHtml(obtenerValor(r,"ESTADO"))}<br><b>Prioridad:</b> ${escaparHtml(obtenerValor(r,"PRIORIDAD"))}<br><b>Cantidad:</b> ${escaparHtml(obtenerValor(r,"CANTIDAD"))}<br><b>Observaciones:</b> ${escaparHtml(obtenerValor(r,"OBSERVACIONES"))}<br><b>Foto 1:</b> ${escaparHtml(obtenerValor(r,"FOTO_1"))}]]></description><Point><coordinates>${lng},${lat},0</coordinates></Point></Placemark>`});kml+=`</Document></kml>`;const blob=new Blob([kml],{type:"application/vnd.google-earth.kml+xml"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`INSPECCION_${id}_${circ}.kml`;document.body.appendChild(a);a.click();a.remove() 
-                        }finally{
+function exportarKML(btn){
+  setEstadoBoton(btn,true);
 
-        setEstadoBoton(btn,false);
-
+  try{
+    if(!inspeccion){
+      alert("No hay inspección cargada.");
+      return;
     }
 
+    const id = obtenerValor(inspeccion,"ID_INSPECCIONES");
+    const circ = obtenerValor(inspeccion,"CIRCUITO_NOMBRE") || obtenerValor(inspeccion,"CIRCUITO");
+
+    let kml = `<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>INSPECCION ${id}</name>`;
+
+    actividades.forEach(r=>{
+      const lat = obtenerValor(r,"LATITUDE");
+      const lng = obtenerValor(r,"LONGITUDE");
+
+      if(!lat || !lng) return;
+
+      kml += `<Placemark><name>ITEM ${xml(obtenerValor(r,"ITEM"))} - ${xml(obtenerValor(r,"ACTIVIDAD_NOMBRE"))}</name><description><![CDATA[<b>Estado:</b> ${escaparHtml(obtenerValor(r,"ESTADO"))}<br><b>Prioridad:</b> ${escaparHtml(obtenerValor(r,"PRIORIDAD"))}<br><b>Cantidad:</b> ${escaparHtml(obtenerValor(r,"CANTIDAD"))}<br><b>Observaciones:</b> ${escaparHtml(obtenerValor(r,"OBSERVACIONES"))}<br><b>Foto 1:</b> ${escaparHtml(obtenerValor(r,"FOTO_1"))}]]></description><Point><coordinates>${lng},${lat},0</coordinates></Point></Placemark>`;
+    });
+
+    kml += `</Document></kml>`;
+
+    const blob = new Blob([kml],{type:"application/vnd.google-earth.kml+xml"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = nombreArchivoInspeccion() + ".kml";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+  }finally{
+    setEstadoBoton(btn,false);
+  }
 }
 function togglePanelIzquierdo(){panelIzquierdoAbierto=!panelIzquierdoAbierto;document.getElementById("layout").classList.toggle("left-open",panelIzquierdoAbierto);setTimeout(()=>map.invalidateSize(),240)}
 function volver(){window.location.href="panel.html"}function normalizarTextoSimple(v){return String(v||"").trim().toUpperCase().replace(/\s+/g," ")}function obtenerValor(r,c){return String((r&&r.obj&&r.obj[c])??"").trim()}function normalizarEstado(e){return String(e||"PENDIENTE").trim().toUpperCase()==="EJECUTADO"?"EJECUTADO":"PENDIENTE"}function escaparHtml(t){return String(t??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}function escaparAtributo(t){return String(t??"").replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/"/g,"&quot;").replace(/\n/g," ")}function xml(t){return String(t??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
