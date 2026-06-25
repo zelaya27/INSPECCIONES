@@ -637,7 +637,13 @@ function exportarExcel(){
     "FECHA_HORA_REGISTRO"
   ];
 
-  const filas = actividades.map(r => ({
+  const filas = [];
+
+for(const r of puntosDentroPoligono){
+  const fotoOriginal = obtenerValor(r,"FOTO_1");
+  const fotoUrl = await obtenerUrlFotoExportacion(fotoOriginal);
+
+  filas.push({
     ITEM: obtenerValor(r,"ITEM"),
     ACTIVIDAD: obtenerValor(r,"ACTIVIDAD_NOMBRE"),
     PRIORIDAD: obtenerValor(r,"PRIORIDAD"),
@@ -649,9 +655,10 @@ function exportarExcel(){
     ESTADO: obtenerValor(r,"ESTADO"),
     OBSERVACIONES: obtenerValor(r,"OBSERVACIONES"),
     ID_INSPECCION: obtenerValor(r,"ID_INSPECCION"),
-    FOTO_1: obtenerValor(r,"FOTO_1"),
+    FOTO_1: fotoUrl,
     FECHA_HORA_REGISTRO: formatearFechaHora(obtenerValor(r,"FECHA_HORA_REGISTRO"))
-  }));
+  });
+}
 
   const ws = XLSX.utils.json_to_sheet(filas,{header:columnas});
 
