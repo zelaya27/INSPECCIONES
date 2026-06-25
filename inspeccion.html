@@ -142,33 +142,21 @@ async function resolverFoto(ruta){
 
     if(data && data.ok){
       const resultado = {
-        thumbnail: data.thumbnail || data.miniatura || data.url || ruta,
-        miniatura: data.miniatura || data.thumbnail || data.url || ruta,
-        url: data.url || data.grande || data.thumbnail || data.miniatura || ruta,
+        thumb: data.thumbnail || data.miniatura || data.url || ruta,
         grande: data.grande || data.url || data.thumbnail || data.miniatura || ruta,
-        viewUrl: data.viewUrl || ruta,
-        original: ruta
+        original: data.viewUrl || ruta
       };
 
       cacheFotos[ruta] = resultado;
       return resultado;
     }
+  }catch(e){}
 
-  }catch(e){
-    console.warn("No se pudo convertir la foto, usando original:", e);
-  }
-
-  const respaldo = {
-    thumbnail: ruta,
-    miniatura: ruta,
-    url: ruta,
+  return {
+    thumb: ruta,
     grande: ruta,
-    viewUrl: ruta,
     original: ruta
   };
-
-  cacheFotos[ruta] = respaldo;
-  return respaldo;
 }
 
 function abrirFotoGrande(url){if(!url)return;document.getElementById("photoModalImg").src=url;document.getElementById("photoModal").classList.add("show")}
