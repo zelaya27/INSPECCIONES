@@ -179,24 +179,42 @@ async function resolverFoto(ruta){
 
     if(data && data.ok){
       const resultado = {
-        thumb: data.thumbnail || data.miniatura || data.url || ruta,
-        grande: data.grande || data.url || data.thumbnail || data.miniatura || ruta,
-        original: data.viewUrl || ruta
+        thumb: data.thumb || data.thumbnail || data.miniatura || data.url || ruta,
+        grande: data.grande || data.url || data.thumb || data.thumbnail || data.miniatura || ruta,
+        original: data.original || data.viewUrl || ruta
       };
 
       cacheFotos[ruta] = resultado;
       return resultado;
     }
-  }catch(e){}
 
-  return {
+  }catch(e){
+    console.warn("No se pudo resolver la foto:", e);
+  }
+
+  const respaldo = {
     thumb: ruta,
     grande: ruta,
     original: ruta
   };
+
+  cacheFotos[ruta] = respaldo;
+  return respaldo;
 }
 
-function abrirFotoGrande(url){if(!url)return;document.getElementById("photoModalImg").src=url;document.getElementById("photoModal").classList.add("show")}
+function abrirFotoGrande(url){
+  if(!url) return;
+
+  const img = document.getElementById("photoModalImg");
+  const modal = document.getElementById("photoModal");
+
+  img.onerror = function(){
+    window.open(url, "_blank");
+  };
+
+  img.src = url;
+  modal.classList.add("show");
+}
 function cerrarFotoGrande(e){if(e&&e.target.id!=="photoModal"&&e.target.className!=="photo-close")return;document.getElementById("photoModal").classList.remove("show");document.getElementById("photoModalImg").src=""}
 function exportarExcel(){if(!inspeccion){alert("No hay inspección cargada.");return}const id=obtenerValor(inspeccion,"ID_INSPECCIONES"),circ=obtenerValor(inspeccion,"CIRCUITO_NOMBRE")||obtenerValor(inspeccion,"CIRCUITO");const columnas=["ITEM","ACTIVIDAD","PRIORIDAD","TIPO_CUADRILLA","CANTIDAD","LATITUDE","LONGITUDE","CUADRILLA","ESTADO","OBSERVACIONES","ID_INSPECCION","FOTO_1","FECHA_HORA_REGISTRO"];const filas=actividades.map(r=>({ITEM:obtenerValor(r,"ITEM"),ACTIVIDAD:obtenerValor(r,"ACTIVIDAD_NOMBRE"),PRIORIDAD:obtenerValor(r,"PRIORIDAD"),TIPO_CUADRILLA:obtenerValor(r,"TIPO_CUADRILLA"),CANTIDAD:obtenerValor(r,"CANTIDAD"),LATITUDE:obtenerValor(r,"LATITUDE"),LONGITUDE:obtenerValor(r,"LONGITUDE"),CUADRILLA:obtenerValor(r,"CUADRILLA"),ESTADO:obtenerValor(r,"ESTADO"),OBSERVACIONES:obtenerValor(r,"OBSERVACIONES"),ID_INSPECCION:obtenerValor(r,"ID_INSPECCION"),FOTO_1:obtenerValor(r,"FOTO_1"),FECHA_HORA_REGISTRO:obtenerValor(r,"FECHA_HORA_REGISTRO")}));const ws=XLSX.utils.json_to_sheet(filas,{header:columnas});filas.forEach((f,i)=>{const cell="L"+(i+2);if(f.FOTO_1)ws[cell].l={Target:f.FOTO_1,Tooltip:"Ver foto"}});ws["!cols"]=columnas.map(h=>({wch:Math.min(Math.max(h.length+6,14),45)}));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"ACTIVIDADES");XLSX.writeFile(wb,`INSPECCION_${id}_${circ}.xlsx`)}
 function exportarKML(){if(!inspeccion)return;const id=obtenerValor(inspeccion,"ID_INSPECCIONES"),circ=obtenerValor(inspeccion,"CIRCUITO_NOMBRE")||obtenerValor(inspeccion,"CIRCUITO");let kml=`<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>INSPECCION ${id}</name>`;actividades.forEach(r=>{const lat=obtenerValor(r,"LATITUDE"),lng=obtenerValor(r,"LONGITUDE");if(!lat||!lng)return;kml+=`<Placemark><name>ITEM ${xml(obtenerValor(r,"ITEM"))} - ${xml(obtenerValor(r,"ACTIVIDAD_NOMBRE"))}</name><description><![CDATA[<b>Estado:</b> ${escaparHtml(obtenerValor(r,"ESTADO"))}<br><b>Prioridad:</b> ${escaparHtml(obtenerValor(r,"PRIORIDAD"))}<br><b>Cantidad:</b> ${escaparHtml(obtenerValor(r,"CANTIDAD"))}<br><b>Observaciones:</b> ${escaparHtml(obtenerValor(r,"OBSERVACIONES"))}<br><b>Foto 1:</b> ${escaparHtml(obtenerValor(r,"FOTO_1"))}]]></description><Point><coordinates>${lng},${lat},0</coordinates></Point></Placemark>`});kml+=`</Document></kml>`;const blob=new Blob([kml],{type:"application/vnd.google-earth.kml+xml"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`INSPECCION_${id}_${circ}.kml`;document.body.appendChild(a);a.click();a.remove()}
