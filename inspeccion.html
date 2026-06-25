@@ -545,9 +545,9 @@ function exportarPuntosPoligono(){
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, "PUNTOS_POLIGONO");
 
- const id = obtenerValor(inspeccion,"ID_INSPECCIONES");
+  const id = obtenerValor(inspeccion,"ID_INSPECCIONES");
 const nombre = obtenerValor(inspeccion,"NOMBRE_INSPECCION");
-const circuito = obtenerValor(inspeccion,"CIRCUITO");
+const circuito = obtenerValor(inspeccion,"CIRCUITO_NOMBRE") || obtenerValor(inspeccion,"CIRCUITO");
 
 const nombreArchivo =
 `INSPECCION_${id}_${nombre}_${circuito}`
