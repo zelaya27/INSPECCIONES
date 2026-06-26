@@ -146,6 +146,7 @@ function pintarMarcadores(ajustarMapa=true){markers.forEach(m=>map.removeLayer(m
     </div>
 
     <div class="popup-body">
+      <b>ID:</b> ${escaparHtml(obtenerValor(r,"ID") || "-")}<br>
       <b>Fecha:</b> ${escaparHtml(formatearFechaHora(obtenerValor(r,"FECHA_HORA_REGISTRO")))}<br>
       <b>Estado:</b> ${escaparHtml(obtenerValor(r,"ESTADO"))}<br>
       <b>Prioridad:</b> ${escaparHtml(obtenerValor(r,"PRIORIDAD"))}<br>
