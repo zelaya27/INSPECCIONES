@@ -232,6 +232,7 @@ async function pintarDetalleDerecho(r){
     <span class="state-badge ${estado==="EJECUTADO" ? "state-ejecutado" : "state-pendiente"}">
       ${estado}
     </span>
+    ${filaDetalle("ID", obtenerValor(r,"ID"))}
     ${filaDetalle("Fecha registro", formatearFechaHora(obtenerValor(r,"FECHA_HORA_REGISTRO")))}
     ${filaDetalle("Actividad", obtenerValor(r,"ACTIVIDAD_NOMBRE"))}
     ${filaDetalle("Prioridad", obtenerValor(r,"PRIORIDAD"))}
