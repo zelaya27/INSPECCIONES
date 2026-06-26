@@ -96,6 +96,8 @@
     <select id="filtroActividadPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Actividad: Todas</option></select>
     <select id="filtroEstadoPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Estado: Todos</option></select>
     <select id="filtroCuadrillaPunto" class="filter-select" onchange="aplicarFiltrosPuntos()"><option value="ALL">Tipo Cuadrilla: Todas</option></select>
+    <input type="date" id="fechaDesdeRegistro" class="filter-select" onchange="aplicarFiltrosPuntos()" title="Fecha registro desde">
+    <input type="date" id="fechaHastaRegistro" class="filter-select" onchange="aplicarFiltrosPuntos()" title="Fecha registro hasta">
     <button class="btn" onclick="limpiarFiltrosPuntos()"><i class="fas fa-sync-alt"></i> Limpiar Filtros</button>
   </div>
   <div class="legend-top" id="leyendaTop"></div>
@@ -127,11 +129,11 @@ function apiJSONP(params){return new Promise((resolve,reject)=>{const cb="jsonp_
 function iniciarMapa(){const sector=String(sessionStorage.getItem("sector")||"").trim().toUpperCase();const mapasSector=window.MAPAS_SECTOR||{};const cfg=mapasSector[sector]||{nombre:"Mapa base",mid:"",lat:14.8,lng:-86.5,zoom:8};map=L.map("map",{zoomControl:true}).setView([cfg.lat,cfg.lng],cfg.zoom);map.doubleClickZoom.disable();L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{maxZoom:19,attribution:"Tiles © Esri"}).addTo(map);if(cfg.mid&&typeof omnivore!=="undefined"){const urlKml="https://www.google.com/maps/d/kml?mid="+encodeURIComponent(cfg.mid)+"&forcekml=1";omnivore.kml(urlKml).on("ready",function(){try{this.setStyle({color:"#00FFFF",weight:3,opacity:.95,fillOpacity:.12})}catch(e){console.warn(e)}}).on("error",function(error){console.error("Error KML:",error);alert("No se pudo cargar el mapa base del sector.")}).addTo(map)}}
 async function cargarDatos(id){const inspecciones=await apiJSONP({action:"obtenerInspecciones"});if(inspecciones.ok){inspeccion=(inspecciones.registros||[]).find(r=>obtenerValor(r,"ID_INSPECCIONES")===id);pintarTitulo()}const acts=await apiJSONP({action:"obtenerActividades",idInspeccion:id});if(!acts.ok){alert(acts.error||"No se pudieron cargar actividades.");return}actividades=acts.registros||[];llenarFiltrosPuntos();aplicarFiltrosPuntos(false);const primera=obtenerActividadesFiltradas()[0]||actividades[0];if(primera){seleccionarItem(obtenerValor(primera,"ITEM"),false)}}
 function pintarTitulo(){if(!inspeccion)return;const id=obtenerValor(inspeccion,"ID_INSPECCIONES"),circ=obtenerValor(inspeccion,"CIRCUITO_NOMBRE")||obtenerValor(inspeccion,"CIRCUITO"),nom=obtenerValor(inspeccion,"NOMBRE_INSPECCION");document.getElementById("tituloInspeccion").textContent=`INSPECCIÓN #${id} | ${circ} | ${nom}`}
-function obtenerActividadesFiltradas(){const prioridad=document.getElementById("filtroPrioridadPunto")?.value||"ALL";const actividad=document.getElementById("filtroActividadPunto")?.value||"ALL";const estado=document.getElementById("filtroEstadoPunto")?.value||"ALL";const cuadrilla=document.getElementById("filtroCuadrillaPunto")?.value||"ALL";return actividades.filter(r=>{const p=normalizarTextoSimple(obtenerValor(r,"PRIORIDAD"));const a=String(obtenerValor(r,"ID_ACTIVIDAD")||"").trim();const e=normalizarEstado(obtenerValor(r,"ESTADO"));const c=normalizarTextoSimple(obtenerValor(r,"TIPO_CUADRILLA"));if(prioridad!=="ALL"&&p!==prioridad)return false;if(actividad!=="ALL"&&a!==actividad)return false;if(estado!=="ALL"&&e!==estado)return false;if(cuadrilla!=="ALL"&&c!==cuadrilla)return false;return true})}
+function obtenerActividadesFiltradas(){const prioridad=document.getElementById("filtroPrioridadPunto")?.value||"ALL";const actividad=document.getElementById("filtroActividadPunto")?.value||"ALL";const estado=document.getElementById("filtroEstadoPunto")?.value||"ALL";const cuadrilla=document.getElementById("filtroCuadrillaPunto")?.value||"ALL";const fechaDesde=document.getElementById("fechaDesdeRegistro")?.value||"";const fechaHasta=document.getElementById("fechaHastaRegistro")?.value||"";return actividades.filter(r=>{const p=normalizarTextoSimple(obtenerValor(r,"PRIORIDAD"));const a=String(obtenerValor(r,"ID_ACTIVIDAD")||"").trim();const e=normalizarEstado(obtenerValor(r,"ESTADO"));const c=normalizarTextoSimple(obtenerValor(r,"TIPO_CUADRILLA"));const fechaRegistro=convertirFechaFiltro(obtenerValor(r,"FECHA_HORA_REGISTRO"));if(prioridad!=="ALL"&&p!==prioridad)return false;if(actividad!=="ALL"&&a!==actividad)return false;if(estado!=="ALL"&&e!==estado)return false;if(cuadrilla!=="ALL"&&c!==cuadrilla)return false;if(fechaDesde&&fechaRegistro&&fechaRegistro<fechaDesde)return false;if(fechaHasta&&fechaRegistro&&fechaRegistro>fechaHasta)return false;return true})}
 function aplicarFiltrosPuntos(ajustarMapa=true){pintarMarcadores(ajustarMapa);pintarLeyendaTop();pintarResumen();pintarListaItems();const filtradas=obtenerActividadesFiltradas();if(itemSeleccionado&&!filtradas.some(r=>obtenerValor(r,"ITEM")===itemSeleccionado)){itemSeleccionado="";document.getElementById("detallePunto").className="detail-empty";document.getElementById("detallePunto").textContent="Seleccione un punto del mapa o un item de la lista."}if(!filtradas.length){document.getElementById("listaItems").innerHTML='<div class="item-sub">Sin resultados con los filtros aplicados.</div>'}}
 function llenarFiltrosPuntos(){llenarSelectFiltro("filtroPrioridadPunto","Prioridad",actividades.map(r=>obtenerValor(r,"PRIORIDAD")),true);llenarSelectFiltro("filtroEstadoPunto","Estado",actividades.map(r=>normalizarEstado(obtenerValor(r,"ESTADO"))),true);llenarSelectFiltro("filtroCuadrillaPunto","Tipo Cuadrilla",actividades.map(r=>obtenerValor(r,"TIPO_CUADRILLA")),true);const sel=document.getElementById("filtroActividadPunto");if(sel){sel.innerHTML='<option value="ALL">Actividad: Todas</option>';const ids=Array.from(new Set(actividades.map(r=>String(obtenerValor(r,"ID_ACTIVIDAD")||"").trim()).filter(Boolean))).sort((a,b)=>Number(a)-Number(b));ids.forEach(id=>{const o=document.createElement("option");o.value=id;o.textContent=(NOMBRE_ACT[id]||id);sel.appendChild(o)})}}
 function llenarSelectFiltro(id,titulo,valores,normalizar){const sel=document.getElementById(id);if(!sel)return;sel.innerHTML=`<option value="ALL">${titulo}: Todas</option>`;const vals=Array.from(new Set(valores.map(v=>normalizar?normalizarTextoSimple(v):String(v||"").trim()).filter(Boolean))).sort();vals.forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;sel.appendChild(o)})}
-function limpiarFiltrosPuntos(){["filtroPrioridadPunto","filtroActividadPunto","filtroEstadoPunto","filtroCuadrillaPunto"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="ALL"});aplicarFiltrosPuntos()}
+function limpiarFiltrosPuntos(){["filtroPrioridadPunto","filtroActividadPunto","filtroEstadoPunto","filtroCuadrillaPunto","fechaDesdeRegistro","fechaHastaRegistro"].forEach(id=>{const el=document.getElementById(id);if(el)el.value=id.startsWith("fecha")?"":"ALL"});aplicarFiltrosPuntos()}
 function pintarMarcadores(ajustarMapa=true){markers.forEach(m=>map.removeLayer(m.marker));markers=[];const bounds=[];obtenerActividadesFiltradas().forEach((r)=>{const lat=Number(obtenerValor(r,"LATITUDE")),lng=Number(obtenerValor(r,"LONGITUDE"));if(!lat||!lng)return;const idAct=obtenerValor(r,"ID_ACTIVIDAD"),color=COLOR_ACT[idAct]||"#fbc02d";const icon=L.divIcon({className:'',html:`<div class="marker-dot" style="background:${color}"></div>`,iconSize:[18,18],iconAnchor:[9,9]});const marker=L.marker([lat,lng],{icon}).addTo(map);marker.on('click',()=>{seleccionarItem(obtenerValor(r,"ITEM"),true);abrirPopupMarker(marker,r)});markers.push({marker,reg:r});bounds.push([lat,lng])});if(bounds.length&&ajustarMapa)map.fitBounds(bounds,{padding:[35,35]})}
 
   async function abrirPopupMarker(marker,r){
@@ -149,6 +151,7 @@ function pintarMarcadores(ajustarMapa=true){markers.forEach(m=>map.removeLayer(m
       <b>Prioridad:</b> ${escaparHtml(obtenerValor(r,"PRIORIDAD"))}<br>
       <b>Cantidad:</b> ${escaparHtml(obtenerValor(r,"CANTIDAD"))}<br>
       <b>Cuadrilla:</b> ${escaparHtml(obtenerValor(r,"TIPO_CUADRILLA"))}<br>
+      <b>Usuario:</b> ${escaparHtml(obtenerValor(r,"USUARIO") || "-")}<br>
       <b>Observaciones:</b> ${escaparHtml(obtenerValor(r,"OBSERVACIONES") || "-")}
     </div>
   `;
@@ -663,6 +666,33 @@ function agregarLinksExcel(ws,filas){
     }
 
   });
+}
+
+function convertirFechaFiltro(fecha){
+  if(!fecha) return "";
+
+  fecha = String(fecha).trim();
+
+  if(/^\d{4}-\d{2}-\d{2}/.test(fecha)){
+    return fecha.substring(0,10);
+  }
+
+  if(fecha.includes("/")){
+    const soloFecha = fecha.split(" ")[0];
+    const p = soloFecha.split("/");
+
+    if(p.length === 3){
+      const d = p[0].padStart(2,"0");
+      const m = p[1].padStart(2,"0");
+      let a = p[2];
+
+      if(a.length === 2) a = "20" + a;
+
+      return `${a}-${m}-${d}`;
+    }
+  }
+
+  return "";
 }
 
 function formatearFechaHora(fecha){
